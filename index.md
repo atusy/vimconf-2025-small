@@ -24,11 +24,22 @@ atusy
         * fast enough to react text changes
         * robust user experience under syntax errors
 * For Neovim,
-    * A key component syntax-related features, especially syntax highlighting
+    * A key component of syntax-related features, especially syntax highlighting
 * For Vim...?
     * mattn has been working on to integrate tree-sitter based syntax highlighting
 
-## Tree-sitter in Neovim
+# Is tree-sitter for syntax highlighting?
+
+* No, tree-sitter is just a parsing library
+* **syntax** highlight is just an application of obtained abstract **syntax** tree
+* We can do more with AST
+    * Code folding
+    * Smart selection of `if` statement, function definition, and so on
+* Unlock your imagination and power of tree-sitter!
+
+# Counting the Neovim builtin applications
+
+How many out of 10 are the builtin?
 
 1. Syntax highlighting
 1. Code folding
@@ -44,4 +55,24 @@ atusy
 1. Range selection/textobject
 1. Sticky scroll <!-- nvim-treesitter-context -->
 
-## 
+# The answer is 8/10
+
+* The power of tree-sitter is already open to you
+
+# Using the Neovim builtin applications
+
+* You might be implicitly relying on some of the builtin features
+* Some needs explict applications
+
+# Extending some features by editing queries
+
+* highlights
+    * extensible
+    * on nested if statement
+* injections
+    * Users can extend (no need to contribute)
+    * we can add patterns of injections (e.g., mini.test provides a way to highlight vim commands in child process)
+* indents
+* locals
+
+
