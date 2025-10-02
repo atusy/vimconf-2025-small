@@ -2,42 +2,48 @@
 
 atusy
 
+## atusy
+
+* https://github.com/atusy
+* https://blog.atusy.net
 
 ## Special Thanks
 
-**3-shake Inc.**
+* **3-shake Inc.**
+    * The Bronze sponsor of VimConf 2025 small
+    * My previous employer
+* **At mark Inc.**
+    * My current employer
 
-* The Bronze sponsor of VimConf 2025 small
-* My previous employer
+## Questions
 
-## 
+* Do you know tree-sitter?
+* Do you use tree-sitter?
+* Do you use tree-sitter in Vim?
 
-* Do you know treesitter?
-* Do you use treesitter?
-* Keep your hands if you are not Neovim users
+## What is tree-sitter in general?
 
-## What is Tree-sitter?
+* A parser generator tool and an incremental parsing library
+    * generous supports on diverse programming languages
+    * fast enough to react text changes
+    * robust user experience under syntax errors
 
-* In general,
-    * A parser generator tool and an incremental parsing library
-        * generous supports on diverse programming languages
-        * fast enough to react text changes
-        * robust user experience under syntax errors
-* For Neovim,
-    * A key component of syntax-related features, especially syntax highlighting
-* For Vim...?
-    * mattn has been working on to integrate tree-sitter based syntax highlighting
+## What is tree-sitter in Neovim/Vim?
 
-# Is tree-sitter for syntax highlighting?
+* For Neovim
+    * builtin feature to interact with syntax tree, especially for syntax highlighting
+* For Vim
+    * opt-in feature to enable syntax highlighting ([mattn/vim-treesitter](https://github.com/mattn/vim-treesitter))
+
+## Is tree-sitter for syntax highlighting?
 
 * No, tree-sitter is just a parsing library
 * **syntax** highlight is just an application of obtained abstract **syntax** tree
 * We can do more with AST
     * Code folding
     * Smart selection of `if` statement, function definition, and so on
-* Unlock your imagination and power of tree-sitter!
 
-# Counting the Neovim builtin applications
+## Usecases in Neovim
 
 How many out of 10 are the builtin?
 
@@ -55,14 +61,19 @@ How many out of 10 are the builtin?
 1. Range selection/textobject
 1. Sticky scroll <!-- nvim-treesitter-context -->
 
-# The answer is 8/10
+## The answer is 8/10
 
-* The power of tree-sitter is already open to you
+* For Neovim users,
+    * the power of tree-sitter is already unlocked
+    * the more power comes with 3rd party plugins
+* For Vim users,
+    * the power of tree-sitter is still locked to 
 
-# Using the Neovim builtin applications
+## Unlock the power of tree-sitter
 
-* You might be implicitly relying on some of the builtin features
-* Some needs explict applications
+by unleashing your imaginations!!
+
+Let's start from exploring fantastic usecases!!
 
 # Extending some features by editing queries
 
