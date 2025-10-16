@@ -4,8 +4,8 @@ atusy
 
 ## atusy
 
-* https://github.com/atusy
-* https://blog.atusy.net
+* <https://github.com/atusy>
+* <https://blog.atusy.net>
 
 ## Special Thanks
 
@@ -30,9 +30,9 @@ atusy
 
 ## What is tree-sitter in Neovim/Vim?
 
-* For Neovim
+* In Neovim
     * builtin feature to interact with syntax tree, especially for syntax highlighting
-* For Vim
+* In Vim
     * opt-in feature to enable syntax highlighting ([mattn/vim-treesitter](https://github.com/mattn/vim-treesitter))
 
 ## Is tree-sitter for syntax highlighting?
@@ -45,35 +45,85 @@ atusy
 
 ## Usecases in Neovim
 
-How many out of 10 are the builtin?
+How many are the builtin
+among the 10 tree-sitter powered features?
 
-1. Syntax highlighting
-1. Code folding
-1. Code completions <!-- :h vim.treesitter.query.omnifunc -->
-1. Outline headings and jumping around them
-1. Tag identification
-    * A help tag in help buffer related to the cursor position
-1. Pairing keywords (like matchit/matchup)
-1. Toggling comments
-1. Context-aware menu (e.g., Open URL)
-    <!-- -->
-1. Indent <!-- nvim-treesitter -->
-1. Range selection/textobject
-1. Sticky scroll <!-- nvim-treesitter-context -->
+ 1. Syntax highlighting
+ 2. Code folding
+ 3. Code completions
+ 4. Outline
+ 5. Pairing keywords (like matchit/matchup)
+ 6. Toggling comments
+ 7. Context-aware menu (e.g., Open URL)
+ 8. Indent
+ 9. Range selection/textobject
+10. Sticky scroll
 
-## The answer is 8/10
+## The answer is ...
+
+7/10, and there are more builtin features
 
 * For Neovim users,
     * the power of tree-sitter is already unlocked
     * the more power comes with 3rd party plugins
 * For Vim users,
-    * the power of tree-sitter is still locked to 
+    * the power of tree-sitter is still locked
 
 ## Unlock the power of tree-sitter
 
 by unleashing your imaginations!!
 
 Let's start from exploring fantastic usecases!!
+
+There are basically sS
+
+
+## Syntax Highlighting
+
+`vim.treesitter.start()`,
+the typical usecase still has room to extend
+
+* URL paths in literal string
+
+```query
+; ~/.config/nvim/after/queries/python/highlights.scm
+(
+  (string_content) @string.special.url
+  (#lua-match? @string.special.url "^https?://%S+$")
+)
+```
+
+* Nested function definitions
+
+```query
+; ~/.config/nvim/after/queries/python/highlights.scm
+(
+  (
+     function_definition
+     body: (
+       block (function_definition) @illuminate
+     )
+  )
+)
+```
+
+## Code folding with foldexpr
+
+`:set foldmethod=expr foldexpr=v:lua.vim.treesitter.foldexpr()`
+is also extensible
+
+* Switching foldable node types
+
+```query
+((section) @fold (#trim! @fold))
+;((list) @fold (#trim! @fold))
+;((fenced_code_block) @fold (#trim! @fold))
+```
+
+## Language Injections
+
+To **parse** various languages in a language
+(e.g., JavaScript in HTML)
 
 # Extending some features by editing queries
 
@@ -86,4 +136,9 @@ Let's start from exploring fantastic usecases!!
 * indents
 * locals
 
+4 approaches
 
+* Editing queries (highlights, folds, locals, injections)
+* Using `vim.treesitter` APIs
+* Implementing parsers
+* Implementing `treesitter-ls`, a language server
