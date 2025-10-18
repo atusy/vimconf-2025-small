@@ -21,36 +21,51 @@ atusy
 * Do you use tree-sitter?
 * Do you use tree-sitter in Vim?
 
-## What is tree-sitter in general?
+## What is tree-sitter
+
+### What is tree-sitter in general?
 
 * A parser generator tool and an incremental parsing library
     * generous supports on diverse programming languages
     * fast enough to react text changes
     * robust user experience under syntax errors
 
-## What is tree-sitter in Neovim/Vim?
+### What is tree-sitter in Neovim/Vim?
 
 * In Neovim
     * builtin feature to interact with syntax tree, especially for syntax highlighting
 * In Vim
     * opt-in feature to enable syntax highlighting ([mattn/vim-treesitter](https://github.com/mattn/vim-treesitter))
 
-## Is tree-sitter for syntax highlighting?
+### Is tree-sitter for syntax highlighting?
 
 * No, tree-sitter is just a parsing library
 * **syntax** highlight is just an application of obtained abstract **syntax** tree
 * We can do more with AST
     * Code folding
-    * Smart selection of `if` statement, function definition, and so on
+    * Smart selection (e.g., `if` statement, function definition, and so on)
+    * ...
 
-## Usecases in Neovim
+## Today's talk
 
-How many are the builtin
+Unlocking the Power of Tree-sitter in Neovim by...
+
+* Exploring various usecases beyond syntax highlighting
+* Introducing potential of treesitter-ls, a language server powered by tree-sitter
+
+## What I don't cover today
+
+* Details of configurations and plugin development
+* Deep dive into tree-sitter internals
+
+## Usecases by Neovim-builtin features
+
+### How many are the builtin
+
 among the 10 tree-sitter powered features?
 
  1. Syntax highlighting
  2. Code folding
- 3. Code completions
  4. Outline
  5. Pairing keywords (like matchit/matchup)
  6. Toggling comments
@@ -59,31 +74,19 @@ among the 10 tree-sitter powered features?
  9. Range selection/textobject
 10. Sticky scroll
 
-## The answer is ...
+### The answer is ...
 
-7/10, and there are more builtin features
+7/10, and there are more builtin features.
 
-* For Neovim users,
-    * the power of tree-sitter is already unlocked
-    * the more power comes with 3rd party plugins
-* For Vim users,
-    * the power of tree-sitter is still locked
+The power of tree-sitter is already unlocked in Neovim!!
 
-## Unlock the power of tree-sitter
-
-by unleashing your imaginations!!
-
-Let's start from exploring fantastic usecases!!
-
-There are basically sS
-
-
-## Syntax Highlighting
+### Syntax Highlighting
 
 `vim.treesitter.start()`,
 the typical usecase still has room to extend
+by editing queries that capture syntax nodes and assign highlight groups.
 
-* URL paths in literal string
+* Highlight URL-like literal strings
 
 ```query
 ; ~/.config/nvim/after/queries/python/highlights.scm
@@ -93,7 +96,7 @@ the typical usecase still has room to extend
 )
 ```
 
-* Nested function definitions
+* Highlight inner function definitions
 
 ```query
 ; ~/.config/nvim/after/queries/python/highlights.scm
@@ -101,44 +104,117 @@ the typical usecase still has room to extend
   (
      function_definition
      body: (
-       block (function_definition) @illuminate
+       block (function_definition) @function.inner
      )
   )
 )
 ```
 
-## Code folding with foldexpr
+### Code folding with foldexpr
 
 `:set foldmethod=expr foldexpr=v:lua.vim.treesitter.foldexpr()`
 is also extensible
 
-* Switching foldable node types
+* Select foldable node types
 
 ```query
+; ~/.config/nvim/after/queries/markdown/folds.scm
 ((section) @fold (#trim! @fold))
 ;((list) @fold (#trim! @fold))
 ;((fenced_code_block) @fold (#trim! @fold))
 ```
 
-## Language Injections
+### Language Injections
 
 To **parse** various languages in a language
-(e.g., JavaScript in HTML)
 
-# Extending some features by editing queries
+* Parse markdown code blocks
 
-* highlights
-    * extensible
-    * on nested if statement
-* injections
-    * Users can extend (no need to contribute)
-    * we can add patterns of injections (e.g., mini.test provides a way to highlight vim commands in child process)
-* indents
-* locals
+```query
+; https://github.com/nvim-treesitter/nvim-treesitter/blob/846d51137b8cbc030ab94edf9dc33968ddcdb195/runtime/queries/markdown/injections.scm#L1-L4
+(fenced_code_block
+  (info_string
+    (language) @injection.language)
+  (code_fence_content) @injection.content)
+```
 
-4 approaches
+* Parse URL-like strings
 
-* Editing queries (highlights, folds, locals, injections)
-* Using `vim.treesitter` APIs
-* Implementing parsers
-* Implementing `treesitter-ls`, a language server
+```query
+(
+  (string_content) @injection.content
+  (#vim-match? @injection.content "^[a-zA-Z][a-zA-Z0-9]*:\/\/\\S\+$")
+  (#set! injection.language "uri")
+)
+```
+
+* Parse literal string as URL
+
+## Usecases by plugins
+
+### Highlight, navigate, and operate on sets of matching text
+
+[andymass/vim-matchup](https://github.com/andymass/vim-matchup)
+
+### Commenting based on context
+
+[numToStr/Comment.nvim](https://github.com/numToStr/Comment.nvim)
+[JoosepAlviste/nvim-ts-context-commentstring](/Users/atusy/.local/share/chezmoi/dot_config/nvim/lua/plugins.lua)
+
+### Show context after functions, methods, statements, etc.
+
+[haringsrob/nvim_context_vt](https://github.com/haringsrob/nvim_context_vt)
+
+### Sticky scroll
+
+[nvim-treesitter/nvim-treesitter-context](https://github.com/nvim-treesitter/nvim-treesitter-context)
+
+### Auto close keywords
+
+like `end`, `endif`, `}` , etc
+
+[AbaoFromCUG/nvim-treesitter-endwise](https://github.com/AbaoFromCUG/nvim-treesitter-endwise)
+
+### Label-hinting for region selections
+
+[treemonkey.nvim](https://github.com/atusy/treemonkey.nvim)
+
+### Extra highlight for special nodes
+
+[tsnode-marker.nvim](https://github.com/atusy/tsnode-marker.nvim)
+
+### Outline view of symbols
+
+[stevearc/aerial.nvim](https://github.com/stevearc/aerial.nvim)
+
+### Textobjects
+
+[nvim-treesitter/nvim-treesitter-textobjects](https://github.com/nvim-treesitter/nvim-treesitter-textobjects)
+
+## Treesitter-ls
+
+A language server powered by tree-sitter
+
+### What are language servers?
+
+lua-language-server, rust-analyzer, ...
+
+They provide language intelligence tools
+
+* Go to Definition
+* Find References
+* Folding Range
+* Selection Range
+* Rename
+* Semantic Tokens
+
+### Why treesitter-ls?
+
+* Unlock Tree-sitter features for any LSP-capable editor
+    * Only an LSP client is required
+* Unlock gaps in language-specific servers
+    * Provide consistent Folding, SelectionRange, and SemanticTokens where absent
+* Unlock fast support for niche or emerging languages
+    * Ship a Tree-sitter grammar + queries instead of a full server
+* Unlock embedded/mixed-language workflows
+    * Use Tree-sitter injections for code blocks, template strings, and DSLs
