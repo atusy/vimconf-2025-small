@@ -304,6 +304,14 @@ local heading_queries = {
 
 [treemonkey.nvim](https://github.com/atusy/treemonkey.nvim)
 
+* Usage
+    * Show label hints for quickly selecting tree-sitter nodes
+* Implementation
+    * Get node range of anscestor nodes by traversing syntax tree from the cursor position
+* Insight
+    * The tree structure is only the interest
+        * no interest in node types or query-captured names
+
 ### Extra highlight for special nodes
 
 [tsnode-marker.nvim](https://github.com/atusy/tsnode-marker.nvim)
