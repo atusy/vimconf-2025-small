@@ -69,7 +69,7 @@ among the 10 tree-sitter powered features?
  4. Outline
  5. Pairing keywords (like matchit/matchup)
  6. Toggling comments
- 7. Context-aware menu (e.g., Open URL)
+ 7. Popup menu (e.g., Open URL)
  8. Indent
  9. Range selection/textobject
 10. Sticky scroll
@@ -149,6 +149,45 @@ To **parse** various languages in a language
 ```
 
 * Parse literal string as URL
+
+### Outline with `gO`
+
+<https://github.com/neovim/neovim/blob/a04c73ca071fdc2461365a8a10a314bd0d1d806d/runtime/lua/vim/treesitter/_headings.lua?plain=1#L9-L14>
+
+* Usage
+    * Outlines headings in `vimdoc` and `markdown` files
+* Implementation
+    * uses custom queries to capture heading nodes
+
+```lua
+-- TODO(clason): use runtimepath queries (for other languages)
+local heading_queries = {
+  vimdoc = [[
+    (h1 (heading) @h1)
+    (h2 (heading) @h2)
+    (h3 (heading) @h3)
+    (column_heading (heading) @h4)
+  ]],
+```
+
+* Insight
+    * Query-based approach makes it extensible to other filetypes without modifying Lua code
+        * Opens door for user-defined queries as well
+
+### Context-aware menu
+
+<https://github.com/neovim/neovim/blob/a04c73ca071fdc2461365a8a10a314bd0d1d806d/runtime/lua/vim/_defaults.lua?plain=1#L487-L489>
+
+* Conditionally adds `Open URL by browser` item to popup menu
+    * by examining URL metadata set by `set!` directive
+
+```query
+; https://github.com/neovim/neovim/blob/a04c73ca071fdc2461365a8a10a314bd0d1d806d/runtime/queries/markdown_inline/highlights.scm?plain=1#L94-L96
+((uri_autolink) @_url
+  (#offset! @_url 0 1 0 -1)
+  (#set! @_url url @_url))
+```
+
 
 ## Usecases by plugins
 
