@@ -419,3 +419,12 @@ It unlocks various possibilities:
 
 * Unlock **injected-language workflows**
     * Use Tree-sitter injections for code blocks, template strings, and DSLs
+
+## ENJOY!!
+
+* Tree-sitter is more than syntax highlighting
+* Tree-sitter helps implement variety of syntax-aware usecases
+    * e.g., code folding, outline, context-aware actions, sticky scroll, and more
+    * with various appraches: query-based, parser-based, callback-based, tree-traversal-based
+* Treesitter-ls aims to bring tree-sitter power to any LSP-capable editor
+
