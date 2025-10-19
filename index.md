@@ -1,79 +1,115 @@
-# Beyond Syntax Highlighting: Unlocking the Power of Tree-sitter in Neovim
+---
+paginate: true
+---
+
+# Beyond Syntax Highlighting
+
+## Unlocking the Power of Tree-sitter in Neovim
 
 atusy
 
+---
+
 ## atusy
 
-* <https://github.com/atusy>
-* <https://blog.atusy.net>
+- <https://github.com/atusy>
+- <https://blog.atusy.net>
+
+---
 
 ## Special Thanks
 
-* **3-shake Inc.**
-    * The Bronze sponsor of VimConf 2025 small
-    * My previous employer
-* **Atmark Inc.**
-    * My current employer
+- **3-shake Inc.**
+    - The Bronze sponsor of VimConf 2025 small
+    - My previous employer
+- **Atmark Inc.**
+    - My current employer
+
+---
 
 ## Questions
 
-* Do you know tree-sitter?
-* Do you use tree-sitter?
-* Do you use tree-sitter in Vim?
+- Do you know tree-sitter?
+- Do you use tree-sitter?
+- Do you use tree-sitter in Vim?
+
+---
 
 ## What is tree-sitter
 
-### What is tree-sitter in general?
+---
 
-* A parser generator tool and an incremental parsing library
-    * generous supports on diverse programming languages
-    * fast enough to react text changes
-    * robust user experience under syntax errors
+### tree-sitter in general
 
-### What is tree-sitter in Neovim/Vim?
+A parser generator tool & an incremental parsing library
 
-* In Neovim
-    * builtin feature to interact with syntax tree, especially for syntax highlighting
-* In Vim
-    * opt-in feature to enable syntax highlighting ([mattn/vim-treesitter](https://github.com/mattn/vim-treesitter))
+- supports on diverse programming languages
+- fast enough to react text changes
+- robust user experience under syntax errors
+
+---
+
+### tree-sitter in Neovim/Vim?
+
+- In Neovim
+    - builtin feature to interact with syntax tree, especially for syntax highlighting
+- In Vim
+    - opt-in feature to enable syntax highlighting ([mattn/vim-treesitter](https://github.com/mattn/vim-treesitter))
+
+---
 
 ### Is tree-sitter for syntax highlighting?
 
-* No, tree-sitter is just a parsing library
-* **syntax** highlight is just an application of obtained abstract **syntax** tree
-* We can do more with AST
-    * Code folding
-    * Smart selection (e.g., `if` statement, function definition, and so on)
-    * ...
+- No, tree-sitter is just a parsing library
+- Highlighting is just an application of obtained AST
+- We can do more with AST
+    - Code folding
+    - Smart selection (e.g., `if` statement, function definition, and so on)
+    - ...
+
+---
 
 ## Today's talk
 
 Unlocking the Power of Tree-sitter in Neovim by...
 
-* Exploring various usecases beyond syntax highlighting
-* Show insightful patterns of tree-sitter integration
-* Introducing potential of treesitter-ls, a language server powered by tree-sitter
+- Exploring various usecases beyond syntax highlighting
+- Show insightful patterns of tree-sitter integration
+- Introducing potential of treesitter-ls, a language server powered by tree-sitter
+
+---
 
 ## What I don't cover today
 
-* Details of configurations and plugin development
-* Deep dive into tree-sitter internals
+- Details of configurations and plugin development
+- Deep dive into tree-sitter internals
+
+---
 
 ## Usecases by Neovim-builtin features
 
+---
+
 ### How many are the builtin
+
+<style scoped>
+ol, p { font-size: 1.7rem }
+</style>
 
 among the 10 tree-sitter powered features?
 
  1. Syntax highlighting
  2. Code folding
- 4. Outline
- 5. Pairing keywords (like matchit/matchup)
- 6. Toggling comments
- 7. Popup menu (e.g., Open URL)
+ 3. Outline
+ 4. Pairing keywords (like matchit/matchup)
+ 5. Toggling comments
+ 6. Popup menu (e.g., Open URL)
+ 7. Open help in browser
  8. Indent
  9. Range selection/textobject
 10. Sticky scroll
+
+---
 
 ### The answer is ...
 
@@ -81,17 +117,25 @@ among the 10 tree-sitter powered features?
 
 The power of tree-sitter is already unlocked in Neovim!!
 
+---
+
 ### Syntax Highlighting
 
-* Usage
-    * `vim.treesitter.start()` enables tree-sitter-based syntax highlighting
-* Implementation
-    * Queries capture syntax nodes and assign highlight groups
-    * User can extend by adding custom queries
+- Usage
+    - `vim.treesitter.start()` enables tree-sitter-based syntax highlighting
+- Implementation
+    - Queries capture syntax nodes and assign highlight groups
+    - User can extend by adding custom queries
+
+---
+
+#### Syntax Highlighting
+
+Example 1: Highlight URL-like literal strings
+
+<!-- ~/.config/nvim/after/queries/python/highlights.scm -->
 
 ```query
-; Example 1: Highlight URL-like literal strings
-; ~/.config/nvim/after/queries/python/highlights.scm
 ;; extends
 (
   (string) ; node type
@@ -104,9 +148,15 @@ The power of tree-sitter is already unlocked in Neovim!!
 )
 ```
 
+---
+
+#### Syntax Highlighting
+
+Example 2: Highlight inner function definitions
+
+<!-- ~/.config/nvim/after/queries/python/highlights.scm -->
+
 ```query
-; Example 2: Highlight inner function definitions
-; ~/.config/nvim/after/queries/python/highlights.scm
 ;; extends
 (
   (
@@ -118,127 +168,203 @@ The power of tree-sitter is already unlocked in Neovim!!
 )
 ```
 
-* Insight
-    * Query-based highlighting allows fine-grained customization beyond language defaults
-    * Predicates like `#lua-match?` enable pattern-based highlighting without parser changes
+---
+
+#### Syntax Highlighting
+
+- Insight
+    - Query-based highlighting allows fine-grained customization beyond language defaults
+    - Predicates like `#lua-match?` enable pattern-based highlighting without parser changes
+
+---
 
 ### Code folding with foldexpr
 
-* Usage
-    * `:set foldmethod=expr foldexpr=v:lua.vim.treesitter.foldexpr()`
-    * Enables structure-aware code folding based on syntax tree
-* Implementation
-    * Queries define which node types should be foldable
-    * `#trim!` directive removes whilespace from the fold range boundaries <!-- :h treesitter-directive-trim! -->
+- Usage
+    - `:set foldmethod=expr foldexpr=v:lua.vim.treesitter.foldexpr()`
+    - Enables structure-aware code folding based on syntax tree
+
+---
+
+### Code folding with foldexpr
+
+- Implementation
+    - Queries define **foldable** node types
+    - `#trim!` directive trims whilespace from the fold range boundaries <!-- :h treesitter-directive-trim! -->
+
+<!-- ~/.config/nvim/after/queries/markdown/folds.scm -->
 
 ```query
-; ~/.config/nvim/after/queries/markdown/folds.scm
 ((section) @fold (#trim! @fold))
 ;((list) @fold (#trim! @fold))
 ;((fenced_code_block) @fold (#trim! @fold))
 ```
 
-* Insight
-    * Users can customize foldable structures per filetype without parser modification
+---
+
+### Code folding with foldexpr
+
+- Insight
+    - Users can customize foldable structures per filetype without parser modification
+
+---
 
 ### Language Injections
 
-* Usage
-    * Enable syntax highlighting and parsing for embedded languages
-        * Examples: code blocks in markdown, URLs in strings, SQL in code comments
-* Implementation
-    * Injection queries specify language and content regions
-    * `@injection.language` and `@injection.content` captures define boundaries
+- Usage
+    - Recursively parse embedded languages and apply tree-sitter features
+        - e.g., highlight markdown code blocks
+- Implementation
+    - Injection queries specify language and content regions
+    - `@injection.language` and `@injection.content` captures define boundaries
+
+---
+
+### Language Injections
+
+- Example 1: Parse markdown code blocks
 
 ```query
-; Example 1: Parse markdown code blocks
-; https://github.com/nvim-treesitter/nvim-treesitter/blob/846d51137b8cbc030ab94edf9dc33968ddcdb195/runtime/queries/markdown/injections.scm#L1-L4
 (fenced_code_block
   (info_string
     (language) @injection.language)
   (code_fence_content) @injection.content)
 ```
 
+[Source in nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter/blob/846d51137b8cbc030ab94edf9dc33968ddcdb195/runtime/queries/markdown/injections.scm#L1-L4)
+
+---
+
+### Language Injections
+
 ```query
 ; Example 2: Parse URL-like strings as URIs
 (
   (string_content) @injection.content
-  (#vim-match? @injection.content "^[a-zA-Z][a-zA-Z0-9]*:\/\/\\S\+$")
+  (
+      #vim-match?
+      @injection.content
+      "^[a-zA-Z][a-zA-Z0-9]*:\/\/\\S\+$"
+  )
   (#set! injection.language "uri")
 )
 ```
 
-* Insight
-    * Opens door to apply filetype-specific features (highlighting, folding, etc.) to embedded content
+---
+
+### Language Injections
+
+- Insight
+    - Opens door to apply filetype-specific features (highlighting, folding, etc.) to embedded content
+
+---
 
 ### Outline with `gO`
 
-<https://github.com/neovim/neovim/blob/a04c73ca071fdc2461365a8a10a314bd0d1d806d/runtime/lua/vim/treesitter/_headings.lua?plain=1#L9-L14>
+[Source in Neovim](https://github.com/neovim/neovim/blob/a04c73ca071fdc2461365a8a10a314bd0d1d806d/runtime/lua/vim/treesitter/_headings.lua?plain=1#L9-L14)
 
-* Usage
-    * Outlines headings in `vimdoc` and `markdown` files
-* Implementation
-    * uses custom queries to capture heading nodes
+- Usage
+    - Outlines headings in `vimdoc` and `markdown`
 
-```lua
--- TODO(clason): use runtimepath queries (for other languages)
-local heading_queries = {
-  vimdoc = [[
-    (h1 (heading) @h1)
-    (h2 (heading) @h2)
-    (h3 (heading) @h3)
-    (column_heading (heading) @h4)
-  ]],
+---
+
+### Outline with `gO`
+
+- Implementation
+    - Custom queries to capture heading nodes
+
+```query
+; vimdoc
+(h1 (heading) @h1)
+(h2 (heading) @h2)
+(h3 (heading) @h3)
+(column_heading (heading) @h4)
 ```
 
-* Insight
-    * Query-based approach allows separation of concerns
-        * Query defines **what** to process (headings)
-        * Lua code defines **how** to process (outline display)
-    * Opens door for user-defined queries as well
+---
+
+### Outline with `gO`
+
+
+- Insight
+    - Query-based approach separates concerns
+        - Query defines **what** to process
+          (headings)
+        - Lua code defines **how** to process
+          (outline display)
+
+---
 
 ### Context-aware popup menu
 
-<https://github.com/neovim/neovim/blob/a04c73ca071fdc2461365a8a10a314bd0d1d806d/runtime/lua/vim/_defaults.lua?plain=1#L487-L489>
+[Source in Neovim](https://github.com/neovim/neovim/blob/a04c73ca071fdc2461365a8a10a314bd0d1d806d/runtime/lua/vim/_defaults.lua?plain=1#L487-L489)
 
-* Usage
-    * Right-click popup menu shows context-specific actions
-        * Example: "Open URL by browser" appears only when cursor is on URL
-* Implementation
-    * Lua code examines if the node has `url` metadata
-    * Queries use `#set!` directive to attach metadata to nodes
+- Usage
+    - Right-click popup menu shows context-specific actions
+        - Example: "Open URL by browser" appears only when cursor is on URL
+
+---
+
+### Context-aware popup menu
+
+- Implementation
+    - Lua code tests if the node has `url` metadata
+    - `#set!` directive assigns node metadata
 
 ```query
-; https://github.com/neovim/neovim/blob/a04c73ca071fdc2461365a8a10a314bd0d1d806d/runtime/queries/markdown_inline/highlights.scm?plain=1#L94-L96
 ((uri_autolink) @_url
   (#offset! @_url 0 1 0 -1)
   (#set! @_url url @_url))
 ```
 
-* Insight
-    * Query-based approach allows separation of concerns
-        * The choice of **capture name** and **metadata** is up to developers
-    * Custom metadata can power actions like "Run test", "Open docs", or "Preview"
+[Source in Neovim](https://github.com/neovim/neovim/blob/a04c73ca071fdc2461365a8a10a314bd0d1d806d/runtime/queries/markdown_inline/highlights.scm?plain=1#L94-L96)
+
+
+---
+
+### Context-aware popup menu
+
+- Insight
+    - Query-based separates concerns
+        - The choice of **capture name** and **metadata** is up to developers
+    - Custom metadata can power actions like "Run test", "Open docs", or "Preview"
+
+---
 
 ### Quick summary
 
-* Neovim implements variety of tree-sitter powered features
-* Most features **separate** concerns by the **query-based approach**
-    * Queries define **what** to process
-    * Lua code defines **how** to process
-* The query-based approach allows **user-custom queries** while keeping source code intact
+- Neovim implements variety of tree-sitter powered features
+- **Query-based approach** is a common pattern
+    - Queries define **what** to process
+    - Lua code defines **how** to process
+- In this way, users can tweak behavior by **user-custom queries**
+
+---
 
 ## Usecases by plugins
+
+---
 
 ### Navigate and highlight matching keywords
 
 [andymass/vim-matchup](https://github.com/andymass/vim-matchup)
 
-* Usage
-    * Navigate and highlight matching keywords (if/endif, def/end, quotes, etc.)
-* Implementation
-    * Find keywords based on original queries
-    * Use `matchup.scm` as query file name to avoid conflict with other plugins, and loads it with `vim.treesitter.query.get_file({lang}, "matchup")`
+- Usage
+    - Navigate and highlight matching keywords (if/endif, def/end, quotes, etc.)
+
+---
+
+### Navigate and highlight matching keywords
+
+- Implementation
+    - Find keywords based on original queries
+    - Loads queries with own file name, `matchup.scm`, and avoids conflicts with other plugins
+
+---
+
+### Navigate and highlight matching keywords
+
+Example from .../queries/lua/**matchup.scm**
 
 ```query
 (
@@ -248,9 +374,16 @@ local heading_queries = {
 ) @scope.loop
 ```
 
-* Insight
-    * Like outline and popup menu, query-based approach allows language-agnostic implementation
-    * Plugin-specific query files is a good pattern to avoid conflicts among multiple plugins
+
+---
+
+### Navigate and highlight matching keywords
+
+- Insight
+    - Like outline and popup menu, query-based approach allows language-agnostic implementation
+    - Plugin-specific query files is a good pattern to avoid conflicts among multiple plugins
+
+---
 
 ### Show context after functions, methods, statements, etc.
 
