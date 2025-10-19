@@ -194,7 +194,7 @@ local heading_queries = {
     * Query-based approach allows language-agnostic implementation
         * Opens door for user-defined queries as well
 
-### Context-aware menu
+### Context-aware popup menu
 
 <https://github.com/neovim/neovim/blob/a04c73ca071fdc2461365a8a10a314bd0d1d806d/runtime/lua/vim/_defaults.lua?plain=1#L487-L489>
 
@@ -215,7 +215,6 @@ local heading_queries = {
 * Insight
     * Query-based approach allows language-agnostic implementation
         * The choice of **capture name** and **metadata** is up to developers
-        * IMO, **metadata** is safer in terms of name collisions with highlight groups
     * Custom metadata can power actions like "Run test", "Open docs", or "Preview"
 
 ## Usecases by plugins
