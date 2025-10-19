@@ -232,9 +232,27 @@ This is **separation of concerns**:
 
 ## Usecases by plugins
 
-### Highlight, navigate, and operate on sets of matching text
+### Navigate and highlight matching keywords
 
 [andymass/vim-matchup](https://github.com/andymass/vim-matchup)
+
+* Usage
+    * Navigate and highlight matching keywords (if/endif, def/end, quotes, etc.)
+* Implementation
+    * Find keywords based on original queries
+    * Use `matchup.scm` as query file name to avoid conflict with other plugins, and loads it with `vim.treesitter.query.get_file({lang}, "matchup")`
+
+```query
+(
+  for_statement
+  "do" @open.loop
+  "end" @close.loop
+) @scope.loop
+```
+
+* Insight
+    * Like outline and popup menu, query-based approach allows language-agnostic implementation
+    * Plugin-specific query files is a good pattern to avoid conflicts among multiple plugins
 
 ### Commenting based on context
 
