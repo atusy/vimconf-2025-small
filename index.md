@@ -35,11 +35,7 @@ atusy
 
 ---
 
-## What is tree-sitter
-
----
-
-### tree-sitter in general
+## What is tree-sitter in general
 
 A parser generator tool & an incremental parsing library
 
@@ -49,33 +45,33 @@ A parser generator tool & an incremental parsing library
 
 ---
 
-### tree-sitter in Neovim/Vim?
+## What is tree-sitter in Neovim/Vim?
 
 - In Neovim
-    - builtin feature to interact with syntax tree, especially for syntax highlighting
+    - Builtin feature to interact with syntax tree, especially for syntax highlighting
 - In Vim
-    - opt-in feature to enable syntax highlighting ([mattn/vim-treesitter](https://github.com/mattn/vim-treesitter))
+    - Opt-in feature to enable syntax highlighting ([mattn/vim-treesitter](https://github.com/mattn/vim-treesitter))
 
 ---
 
-### Is tree-sitter for syntax highlighting?
+## Is tree-sitter for syntax highlighting?
 
 - No, tree-sitter is just a parsing library
 - Highlighting is just an application of obtained AST
-- We can do more with AST
+- AST helps variety of usecases, such as:
     - Code folding
-    - Smart selection (e.g., `if` statement, function definition, and so on)
-    - ...
+    - Smart selection (e.g., `if` function definition)
+    - Outline
 
 ---
 
 ## Today's talk
 
-Unlocking the Power of Tree-sitter in Neovim by...
+Unlocking the Power of Tree-sitter by...
 
 - Exploring various usecases beyond syntax highlighting
 - Show insightful patterns of tree-sitter integration
-- Introducing potential of treesitter-ls, a language server powered by tree-sitter
+- Introducing potential of treesitter-ls, a language server
 
 ---
 
@@ -87,6 +83,14 @@ Unlocking the Power of Tree-sitter in Neovim by...
 ---
 
 ## Usecases by Neovim-builtin features
+
+Let's learn
+
+- Usage
+- Implementation
+- Insight
+
+from variety of features
 
 ---
 
@@ -113,9 +117,9 @@ among the 10 tree-sitter powered features?
 
 ### The answer is ...
 
-7/10, and there are more builtin features.
-
-The power of tree-sitter is already unlocked in Neovim!!
+* 7/10, and there are more builtin features.
+* The power of tree-sitter is already unlocked in Neovim!!
+* If you use Vim, sorry for inconvenience..., but I have a good news today
 
 ---
 
@@ -131,7 +135,7 @@ The power of tree-sitter is already unlocked in Neovim!!
 
 #### Syntax Highlighting
 
-Example 1: Highlight URL-like literal strings
+- Example 1: Highlight URL-like literal strings
 
 <!-- ~/.config/nvim/after/queries/python/highlights.scm -->
 
@@ -152,7 +156,7 @@ Example 1: Highlight URL-like literal strings
 
 #### Syntax Highlighting
 
-Example 2: Highlight inner function definitions
+- Example 2: Highlight inner function definitions
 
 <!-- ~/.config/nvim/after/queries/python/highlights.scm -->
 
@@ -181,8 +185,12 @@ Example 2: Highlight inner function definitions
 ### Code folding with foldexpr
 
 - Usage
-    - `:set foldmethod=expr foldexpr=v:lua.vim.treesitter.foldexpr()`
     - Enables structure-aware code folding based on syntax tree
+
+```vim
+:set foldmethod=expr
+:set foldexpr=v:lua.vim.treesitter.foldexpr()
+```
 
 ---
 
@@ -192,7 +200,13 @@ Example 2: Highlight inner function definitions
     - Queries define **foldable** node types
     - `#trim!` directive trims whilespace from the fold range boundaries <!-- :h treesitter-directive-trim! -->
 
+---
+
+### Code folding with foldexpr
+
 <!-- ~/.config/nvim/after/queries/markdown/folds.scm -->
+
+- Example in markdown
 
 ```query
 ((section) @fold (#trim! @fold))
@@ -205,15 +219,20 @@ Example 2: Highlight inner function definitions
 ### Code folding with foldexpr
 
 - Insight
-    - Users can customize foldable structures per filetype without parser modification
+    - Users can customize foldable nodes per filetype without parser modification
 
 ---
 
 ### Language Injections
 
 - Usage
-    - Recursively parse embedded languages and apply tree-sitter features
+    - Apply tree-sitter features to embedded languages by recursive parsing
         - e.g., highlight markdown code blocks
+
+---
+
+### Language Injections
+
 - Implementation
     - Injection queries specify language and content regions
     - `@injection.language` and `@injection.content` captures define boundaries
@@ -237,8 +256,9 @@ Example 2: Highlight inner function definitions
 
 ### Language Injections
 
+- Example 2: Parse URL-like strings as URIs
+
 ```query
-; Example 2: Parse URL-like strings as URIs
 (
   (string_content) @injection.content
   (
@@ -301,7 +321,8 @@ Example 2: Highlight inner function definitions
 
 - Usage
     - Right-click popup menu shows context-specific actions
-        - Example: "Open URL by browser" appears only when cursor is on URL
+- Example
+    - "Open URL by browser" appears only when cursor is on URL
 
 ---
 
@@ -331,17 +352,19 @@ Example 2: Highlight inner function definitions
 
 ---
 
-### Quick summary
+## Quick summary 1
 
-- Neovim implements variety of tree-sitter powered features
+- Neovim has variety of tree-sitter powered features
 - **Query-based approach** is a common pattern
     - Queries define **what** to process
     - Lua code defines **how** to process
-- In this way, users can tweak behavior by **user-custom queries**
+- Use **custom queries** to extend query-based behavior
 
 ---
 
 ## Usecases by plugins
+
+Some of my favorites...
 
 ---
 
@@ -364,7 +387,7 @@ Example 2: Highlight inner function definitions
 
 ### Navigate and highlight matching keywords
 
-Example from .../queries/lua/**matchup.scm**
+- Example from .../queries/lua/**matchup.scm**
 
 ```query
 (
@@ -517,10 +540,14 @@ Example from .../queries/lua/**matchup.scm**
 
 ---
 
-### Quick summary
+## Quick summary 2
 
-- Power of tree-sitter applies to vast variety of plugins
-- Plugins demonstrate **diverse approaches** to tree-sitter integration
+- Vast variety of plugins uses tree-sitter
+- Tree-sitter integration has **diverse approaches**
+    - query
+    - parser
+    - callback
+    - tree-traversal
 
 ---
 
@@ -554,9 +581,7 @@ A WIP language server powered by tree-sitter
 
 ---
 
-### What are language servers
-
-They provides language intelligence tools
+### Language servers provide intelligence tools
 
 - Go to Definition
 - Find References
@@ -568,9 +593,9 @@ They provides language intelligence tools
 
 ---
 
-### Typical language servers
+### Typical language servers are language-specific
 
-are language-specific such as ...
+such as ...
 
 - pyright (Python)
 - tsserver (TypeScript/JavaScript)
@@ -581,13 +606,13 @@ are language-specific such as ...
 
 ### Are language servers language-specific?
 
-- No, not necessarily.
-- [copilot-language-server](https://www.npmjs.com/package/@github/copilot-language-server) provides AI-powered code completions for any language.
-- **treesitter-ls** can support any language given a tree-sitter parser and queries.
+- No, not necessarily
+- [copilot-language-server](https://www.npmjs.com/package/@github/copilot-language-server) provides AI-powered code completions for any language
+- [treesitter-ls](https://github.com/atusy/treesitter-ls) can support any language given a tree-sitter parser and queries
 
 ---
 
-### Can treesitter-ls provide language intelligence tools?
+### Can treesitter-ls provide intelligence tools?
 
 Yes, for example:
 
@@ -603,18 +628,20 @@ Yes, for example:
 
 ### Will treesitter-ls replace language-specific servers?
 
-- No, some require deeper semantic understanding
+No, because ...
+
+- Some require deeper semantic understanding
     - e.g., type checking, linting, code actions, ...
-- No, treesitter-ls capable features can be better provided by language-specific servers
-    - e.g., more accurate go to definition by understanding scopes
+- [treesitter-ls](https://github.com/atusy/treesitter-ls) capable features can be better provided by language-specific servers
+    - e.g., scope-aware go to definition
 
 ---
 
 ### Why treesitter-ls?
 
-It unlocks various possibilities:
+To unlock various possibilities:
 
-1. Unlock tree-sitter to **any LSP-capable editor**
+1. Unlock **availability** to any LSP-capable editor
     - Allows Bram's Vim users to enjoy tree-sitter features
     - Editors may even omit builtin syntax highlighting, which tend to be essential
 
@@ -630,7 +657,7 @@ It unlocks various possibilities:
 
 ### Why treesitter-ls?
 
-3. Unlock fast support for **niche or emerging languages**
+3. Unlock **difficulty** to support niche or emerging languages
     - Just ship a Tree-sitter parser + queries instead of a full server
     - Developer productivity **boost for new languages**
 
@@ -641,14 +668,16 @@ It unlocks various possibilities:
 
 4. Unlock **injected-language workflows**
     - Use Tree-sitter injections for code blocks, template strings, and DSLs
+    - By [treesitter-ls](https://github.com/atusy/treesitter-ls) itself being LSP-client
+        - Receive LSP-config from editor, and attach language servers for injected languages automatically
 
 ---
 
 ## ENJOY!!
 
-- Tree-sitter is more than syntax highlighting
+- Tree-sitter is not just for syntax highlighting
 - Tree-sitter helps variety of syntax-aware usecases
-    - e.g., code folding, outline, context-aware actions, sticky scroll, and more
+    - e.g., code folding, outline, sticky scroll, range selection, and more
 - Treesitter-ls aims to bring tree-sitter power to any LSP-capable editor
 
 <style>
