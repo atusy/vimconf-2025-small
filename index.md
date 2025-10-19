@@ -251,14 +251,20 @@ local heading_queries = {
     * Like outline and popup menu, query-based approach allows language-agnostic implementation
     * Plugin-specific query files is a good pattern to avoid conflicts among multiple plugins
 
-### Commenting based on context
-
-[numToStr/Comment.nvim](https://github.com/numToStr/Comment.nvim)
-[JoosepAlviste/nvim-ts-context-commentstring](/Users/atusy/.local/share/chezmoi/dot_config/nvim/lua/plugins.lua)
-
 ### Show context after functions, methods, statements, etc.
 
 [haringsrob/nvim_context_vt](https://github.com/haringsrob/nvim_context_vt)
+
+* Usage
+    * Shows virtual text of the current context after functions, methods, statements, etc.
+* Implementation
+    * Distinguish nodes to show context by hard-coded list of node types
+    * Still extensible via Lua-based configuration
+    * Avoids requirement of queries per language
+      <https://github.com/andersevenrud/nvim_context_vt/blob/fadbd9e57af72f6df3dd33df32ee733aa01cdbc0/lua/nvim_context_vt/config.lua#L19-L58>
+* Insight
+    * Parser-based approach can provide extensibility with less setup
+    * Parser-based approach can be less language-specific because parsers tend to share common node types
 
 ### Sticky scroll
 
