@@ -12,7 +12,7 @@ atusy
 * **3-shake Inc.**
     * The Bronze sponsor of VimConf 2025 small
     * My previous employer
-* **At mark Inc.**
+* **Atmark Inc.**
     * My current employer
 
 ## Questions
