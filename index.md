@@ -306,6 +306,7 @@ local heading_queries = {
 
 * Usage
     * Show label hints for quickly selecting tree-sitter nodes
+    * Use two-step selection to avoid ambiguity of overlapping label hints
 * Implementation
     * Get node range of anscestor nodes by traversing syntax tree from the cursor position
 * Insight
@@ -316,13 +317,26 @@ local heading_queries = {
 
 [tsnode-marker.nvim](https://github.com/atusy/tsnode-marker.nvim)
 
-### Outline view of symbols
+* Usage
+    * Highlgiht nodes that satisfies user-specified callback functions
+    * Supports highlighting to the end of the line
+        * not just the node range
+        * useful for highlighting function definitions, markdown codeblcocks, etc.
+* Implementation
+    * Pass node at the cursor to user-defined callback functions
+    * Applies additional highlights via extmarks
+* Insight
+    * Callback based approach allows flexible customization beyond query capabilities
 
-[stevearc/aerial.nvim](https://github.com/stevearc/aerial.nvim)
+### And more...
 
-### Textobjects
-
-[nvim-treesitter/nvim-treesitter-textobjects](https://github.com/nvim-treesitter/nvim-treesitter-textobjects)
+* Outlines
+    * [stevearc/aerial.nvim](https://github.com/stevearc/aerial.nvim)
+* Textobjects
+    * [nvim-treesitter/nvim-treesitter-textobjects](https://github.com/nvim-treesitter/nvim-treesitter-textobjects)
+* Commenting
+    * [nvim-mini/mini.comment](https://github.com/nvim-mini/mini.comment)
+    * [numToStr/Comment.nvim](https://github.com/numToStr/Comment.nvim) + [JoosepAlviste/nvim-ts-context-commentstring](https://github.com/JoosepAlviste/nvim-ts-context-commentstring)
 
 ## Treesitter-ls
 
