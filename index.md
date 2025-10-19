@@ -191,8 +191,10 @@ local heading_queries = {
 ```
 
 * Insight
-    * Query-based approach allows language-agnostic implementation
-        * Opens door for user-defined queries as well
+    * Query-based approach allows separation of concerns
+        * Query defines **what** to process (headings)
+        * Lua code defines **how** to process (outline display)
+    * Opens door for user-defined queries as well
 
 ### Context-aware popup menu
 
@@ -213,22 +215,17 @@ local heading_queries = {
 ```
 
 * Insight
-    * Query-based approach allows language-agnostic implementation
+    * Query-based approach allows separation of concerns
         * The choice of **capture name** and **metadata** is up to developers
     * Custom metadata can power actions like "Run test", "Open docs", or "Preview"
 
 ### Quick summary
 
-Common insights across builtin features:
-
-* Query-based approach enables **language-agnostic** implementation
-* Users can extend functionality by **adding custom queries**
-* **No parser/code modification** needed for customization
-
-This is **separation of concerns**:
-
-* **Queries** (declarative): Define **what** to extract (`@function`, `@fold`, metadata)
-* **Lua code** (imperative): Define **how** to process (highlight, fold, show menu)
+* Neovim implements variety of tree-sitter powered features
+* Most features **separate** concerns by the **query-based approach**
+    * Queries define **what** to process
+    * Lua code defines **how** to process
+* The query-based approach allows **user-custom queries** while keeping source code intact
 
 ## Usecases by plugins
 
