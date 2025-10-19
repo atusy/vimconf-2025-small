@@ -51,6 +51,7 @@ atusy
 Unlocking the Power of Tree-sitter in Neovim by...
 
 * Exploring various usecases beyond syntax highlighting
+* Show insightful patterns of tree-sitter integration
 * Introducing potential of treesitter-ls, a language server powered by tree-sitter
 
 ## What I don't cover today
