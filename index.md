@@ -338,9 +338,32 @@ local heading_queries = {
     * [nvim-mini/mini.comment](https://github.com/nvim-mini/mini.comment)
     * [numToStr/Comment.nvim](https://github.com/numToStr/Comment.nvim) + [JoosepAlviste/nvim-ts-context-commentstring](https://github.com/JoosepAlviste/nvim-ts-context-commentstring)
 
-## Treesitter-ls
+### Quick summary
 
-A language server powered by tree-sitter
+* Power of tree-sitter applies to vast variety of plugins
+* Plugins demonstrate **diverse approaches** to tree-sitter integration
+    * **Query-based**
+        * separates concerns
+            * what to process (queries)
+            * how to process (Lua code)
+        * requires query per lanugae, but highly declarative
+    * **Parser-based**
+        * requires Lua code to do everything
+        * allows (partially) language-agnostic logic
+            * because there are common node types across languages
+    * **Callback-based**
+        * requires user-defined Lua functions
+        * allows maximum flexibility
+    * **Tree-traversal**
+        * applicable iff only tree structure matters
+
+## Yet another approach to bring tree-sitter power to editors
+
+🚧 **Treesitter-ls** 🚧
+
+A WIP language server powered by tree-sitter
+
+<https://github.com/atusy/treesitter-ls>
 
 ### What are language servers?
 
@@ -355,13 +378,44 @@ They provide language intelligence tools
 * Rename
 * Semantic Tokens
 
+### Are language servers language-specific?
+
+No, not necessarily.
+
+**copilot-language-server** is a language-agnostic language server
+that provides AI-powered code completions for any language.
+<https://www.npmjs.com/package/@github/copilot-language-server>
+
+and **treesitter-ls** is also a language-agnostic language server
+that can support any language given a tree-sitter parser and queries.
+
+### Can treesitter-ls provide language intelligence tools?
+
+Yes, for example:
+
+* Semantic Tokens
+* Go to Definition
+* Find References
+* Folding Range
+* Selection Range
+* Rename
+
 ### Why treesitter-ls?
 
-* Unlock Tree-sitter features for any LSP-capable editor
+It unlocks various possibilities:
+
+* Unlock Tree-sitter features for **any LSP-capable editor**
     * Only an LSP client is required
-* Unlock gaps in language-specific servers
-    * Provide consistent Folding, SelectionRange, and SemanticTokens where absent
-* Unlock fast support for niche or emerging languages
-    * Ship a Tree-sitter grammar + queries instead of a full server
-* Unlock embedded/mixed-language workflows
+    * Allows Bram's Vim users to enjoy tree-sitter features
+    * Editors may even omit builtin syntax highlighting, which tend to be essential feature
+
+* Unlock **gaps** in language-specific servers
+    * Provide consistent Folding, SelectionRange, and SemanticTokens where absent in language-specific servers
+    * People may **forget about which server supports which feature**
+
+* Unlock fast support for **niche or emerging languages**
+    * Just ship a Tree-sitter parser + queries instead of a full server
+    * Developer productivity **boost for new languages**
+
+* Unlock **injected-language workflows**
     * Use Tree-sitter injections for code blocks, template strings, and DSLs
