@@ -389,107 +389,160 @@ Example from .../queries/lua/**matchup.scm**
 
 [haringsrob/nvim_context_vt](https://github.com/haringsrob/nvim_context_vt)
 
-* Usage
-    * Shows virtual text of the current context after functions, methods, statements, etc.
-* Implementation
-    * Distinguish nodes to show context by hard-coded list of node types
-    * Still extensible via Lua-based configuration
-    * Avoids requirement of queries per language
-      <https://github.com/andersevenrud/nvim_context_vt/blob/fadbd9e57af72f6df3dd33df32ee733aa01cdbc0/lua/nvim_context_vt/config.lua#L19-L58>
-* Insight
-    * Parser-based approach can provide extensibility with less setup
-    * Parser-based approach can be less language-specific because parsers tend to share common node types
+- Usage
+    - Shows virtual text of the current context after functions, methods, statements, etc.
+
+---
+
+### Show context after functions, methods, statements, etc.
+
+- Implementation
+    - List node types to show context
+        - Hard coded, but still extensible
+        - Avoiding queries per language with the help of common node types ([source](https://github.com/andersevenrud/nvim_context_vt/blob/fadbd9e57af72f6df3dd33df32ee733aa01cdbc0/lua/nvim_context_vt/config.lua#L19-L58))
+
+---
+
+### Show context after functions, methods, statements, etc.
+
+- Insight
+    - Parser-based approach can provide extensibility with less setup
+    - Parser-based approach can be less language-specific because parsers tend to share common node types
+
+---
 
 ### Sticky scroll
 
 [nvim-treesitter/nvim-treesitter-context](https://github.com/nvim-treesitter/nvim-treesitter-context)
 
-* Usage
-    * Keep function/class headers visible at top of window while scrolling
-    * Similar to IDE sticky headers feature
-* Implementation
-    * Use queries to capture context nodes (`@context`)
-    * Just show first line of `@context` capture as is
-        * No need to know nest level
+- Usage
+    - Keep function/class headers visible at top of window while scrolling
+    - Similar to IDE sticky headers feature
 
-```query
-; markdown
-; https://github.com/nvim-treesitter/nvim-treesitter-context/blob/41847d3dafb5004464708a3db06b14f12bde548a/queries/markdown/context.scm#L2
-((section) @context)
-```
+---
 
-* Insight
-    * Yet another example of query-based approach
-    * Similar to outline, but does not care nest level
+### Sticky scroll
 
-### Auto close keywords
+- Implementation
+    - Use queries to capture context nodes (`@context`)
+    - Just show first line of `@context` capture as is
+        - No need to know nest level unlike outline
 
-[RRethy/nvim-treesitter-endwise](https://github.com/RRethy/nvim-treesitter-endwise)
+---
 
-* Usage
-    * Automatically insert closing keywords (end, endif, fi, etc.)
-    * Example: Typing `if ... then` in lue automatically adds `end`
-* Implementation
-    * `endwise.scm` query to identify opening keywords, and specify corresponding closing keywords
-    * `endwise`-directive
-* Insight
+### Sticky scroll
+
+- Insight
+    - Yet another example of query-based approach
+    - Similar to outline, but does not care nest level
+
+---
 
 ### Label-hinting for region selections
 
 [treemonkey.nvim](https://github.com/atusy/treemonkey.nvim)
 
-* Usage
-    * Show label hints for quickly selecting tree-sitter nodes
-    * Use two-step selection to avoid ambiguity of overlapping label hints
-* Implementation
-    * Get node range of anscestor nodes by traversing syntax tree from the cursor position
-* Insight
-    * The tree structure is only the interest
-        * no interest in node types or query-captured names
+- Usage
+    - Show label hints for quickly selecting tree-sitter nodes
+    - Use two-step selection to avoid ambiguity of overlapping label hints
+
+---
+
+### Label-hinting for region selections
+
+- Implementation
+    - Get node range of anscestor nodes by traversing syntax tree from the cursor position
+
+---
+
+### Label-hinting for region selections
+
+- Insight
+    - The tree structure is only the interest
+        - no interest in node types or query-captured names
+
+---
 
 ### Extra highlight for special nodes
 
 [tsnode-marker.nvim](https://github.com/atusy/tsnode-marker.nvim)
 
-* Usage
-    * Highlgiht nodes that satisfies user-specified callback functions
-    * Supports highlighting to the end of the line
-        * not just the node range
-        * useful for highlighting function definitions, markdown codeblcocks, etc.
-* Implementation
-    * Pass node at the cursor to user-defined callback functions
-    * Applies additional highlights via extmarks
-* Insight
-    * Callback based approach allows flexible customization beyond query capabilities
+- Usage
+    - Highlgiht nodes that satisfies user-specified callback functions
+    - Supports highlighting to the end of the line
+
+---
+
+### Extra highlight for special nodes
+
+- Examples
+    - Highlight markdown fenced code blocks
+    - Highlight nested function definitions
+
+---
+
+### Extra highlight for special nodes
+
+- Implementation
+    - Pass node at the cursor to user-defined callback functions
+    - Applies additional highlights via extmarks
+
+---
+
+### Extra highlight for special nodes
+
+- Insight
+    - Callback based approach allows flexible customization beyond query capabilities
+
+---
 
 ### And more...
 
-* Outlines
-    * [stevearc/aerial.nvim](https://github.com/stevearc/aerial.nvim)
-* Textobjects
-    * [nvim-treesitter/nvim-treesitter-textobjects](https://github.com/nvim-treesitter/nvim-treesitter-textobjects)
-* Commenting
-    * [nvim-mini/mini.comment](https://github.com/nvim-mini/mini.comment)
-    * [numToStr/Comment.nvim](https://github.com/numToStr/Comment.nvim) + [JoosepAlviste/nvim-ts-context-commentstring](https://github.com/JoosepAlviste/nvim-ts-context-commentstring)
+1. Auto-close keywords
+    - [RRethy/nvim-treesitter-endwise](https://github.com/RRethy/nvim-treesitter-endwise)
+    - Example: Typing `if ... then` in Lua automatically adds `end`
+2. Outlines
+    - [stevearc/aerial.nvim](https://github.com/stevearc/aerial.nvim)
+
+---
+
+
+### And more...
+
+3. Textobjects
+    - [nvim-treesitter/nvim-treesitter-textobjects](https://github.com/nvim-treesitter/nvim-treesitter-textobjects)
+4. Commenting
+    - [nvim-mini/mini.comment](https://github.com/nvim-mini/mini.comment)
+    - [numToStr/Comment.nvim](https://github.com/numToStr/Comment.nvim) + [JoosepAlviste/nvim-ts-context-commentstring](https://github.com/JoosepAlviste/nvim-ts-context-commentstring)
+
+---
 
 ### Quick summary
 
-* Power of tree-sitter applies to vast variety of plugins
-* Plugins demonstrate **diverse approaches** to tree-sitter integration
-    * **Query-based**
-        * separates concerns
-            * what to process (queries)
-            * how to process (Lua code)
-        * requires query per lanugae, but highly declarative
-    * **Parser-based**
-        * requires Lua code to do everything
-        * allows (partially) language-agnostic logic
-            * because there are common node types across languages
-    * **Callback-based**
-        * requires user-defined Lua functions
-        * allows maximum flexibility
-    * **Tree-traversal**
-        * applicable iff only tree structure matters
+- Power of tree-sitter applies to vast variety of plugins
+- Plugins demonstrate **diverse approaches** to tree-sitter integration
+
+---
+
+### Quick summary of approaches
+
+1. **Query**-based approach
+    - requires query per lanuguage, but highly declarative
+2. **Parser-based**
+    - requires Lua code to do everything
+    - (partially) language-agnostic logic using common node types
+
+---
+
+### Quick summary of approaches
+
+3. **Callback-based**
+    - requires user-defined Lua functions
+    - allows maximum flexibility
+4. **Tree-traversal**
+    - applicable iff only tree structure matters
+
+---
 
 ## Yet another approach to bring tree-sitter power to editors
 
@@ -499,66 +552,109 @@ A WIP language server powered by tree-sitter
 
 <https://github.com/atusy/treesitter-ls>
 
-### What are language servers?
+---
 
-lua-language-server, rust-analyzer, ...
+### What are language servers
 
-They provide language intelligence tools
+They provides language intelligence tools
 
-* Go to Definition
-* Find References
-* Folding Range
-* Selection Range
-* Rename
-* Semantic Tokens
+- Go to Definition
+- Find References
+- Folding Range
+- Selection Range
+- Rename
+- Semantic Tokens
+
+
+---
+
+### Typical language servers
+
+are language-specific such as ...
+
+- pyright (Python)
+- tsserver (TypeScript/JavaScript)
+- rust-analyzer (Rust)
+
+
+---
 
 ### Are language servers language-specific?
 
-No, not necessarily.
+- No, not necessarily.
+- [copilot-language-server](https://www.npmjs.com/package/@github/copilot-language-server) provides AI-powered code completions for any language.
+- **treesitter-ls** can support any language given a tree-sitter parser and queries.
 
-**copilot-language-server** is a language-agnostic language server
-that provides AI-powered code completions for any language.
-<https://www.npmjs.com/package/@github/copilot-language-server>
-
-and **treesitter-ls** is also a language-agnostic language server
-that can support any language given a tree-sitter parser and queries.
+---
 
 ### Can treesitter-ls provide language intelligence tools?
 
 Yes, for example:
 
-* Semantic Tokens
-* Go to Definition
-* Find References
-* Folding Range
-* Selection Range
-* Rename
+- Semantic Tokens (higihlighting)
+- Go to Definition
+- Find References
+- Folding Range
+- Selection Range
+- Rename
+
+
+---
+
+### Will treesitter-ls replace language-specific servers?
+
+- No, some require deeper semantic understanding
+    - e.g., type checking, linting, code actions, ...
+- No, treesitter-ls capable features can be better provided by language-specific servers
+    - e.g., more accurate go to definition by understanding scopes
+
+---
 
 ### Why treesitter-ls?
 
 It unlocks various possibilities:
 
-* Unlock Tree-sitter features for **any LSP-capable editor**
-    * Only an LSP client is required
-    * Allows Bram's Vim users to enjoy tree-sitter features
-    * Editors may even omit builtin syntax highlighting, which tend to be essential feature
+1. Unlock tree-sitter to **any LSP-capable editor**
+    - Allows Bram's Vim users to enjoy tree-sitter features
+    - Editors may even omit builtin syntax highlighting, which tend to be essential
 
-* Unlock **gaps** in language-specific servers
-    * Provide consistent Folding, SelectionRange, and SemanticTokens where absent in language-specific servers
-    * People may **forget about which server supports which feature**
+---
 
-* Unlock fast support for **niche or emerging languages**
-    * Just ship a Tree-sitter parser + queries instead of a full server
-    * Developer productivity **boost for new languages**
+### Why treesitter-ls?
 
-* Unlock **injected-language workflows**
-    * Use Tree-sitter injections for code blocks, template strings, and DSLs
+2. Unlock **gaps** in language-specific servers
+    - Provide consistent Folding, SelectionRange, and SemanticTokens where absent in language-specific servers
+    - People may **forget about which server supports which feature**
+
+---
+
+### Why treesitter-ls?
+
+3. Unlock fast support for **niche or emerging languages**
+    - Just ship a Tree-sitter parser + queries instead of a full server
+    - Developer productivity **boost for new languages**
+
+
+---
+
+### Why treesitter-ls?
+
+4. Unlock **injected-language workflows**
+    - Use Tree-sitter injections for code blocks, template strings, and DSLs
+
+---
 
 ## ENJOY!!
 
-* Tree-sitter is more than syntax highlighting
-* Tree-sitter helps implement variety of syntax-aware usecases
-    * e.g., code folding, outline, context-aware actions, sticky scroll, and more
-    * with various appraches: query-based, parser-based, callback-based, tree-traversal-based
-* Treesitter-ls aims to bring tree-sitter power to any LSP-capable editor
+- Tree-sitter is more than syntax highlighting
+- Tree-sitter helps variety of syntax-aware usecases
+    - e.g., code folding, outline, context-aware actions, sticky scroll, and more
+- Treesitter-ls aims to bring tree-sitter power to any LSP-capable editor
 
+<style>
+section {
+    justify-content: flex-start;
+    align-content: start;
+font-size: 3rem;
+}
+</style>
