@@ -82,24 +82,31 @@ The power of tree-sitter is already unlocked in Neovim!!
 
 ### Syntax Highlighting
 
-`vim.treesitter.start()`,
-the typical usecase still has room to extend
-by editing queries that capture syntax nodes and assign highlight groups.
-
-* Highlight URL-like literal strings
+* Usage
+    * `vim.treesitter.start()` enables tree-sitter-based syntax highlighting
+* Implementation
+    * Queries capture syntax nodes and assign highlight groups
+    * User can extend by adding custom queries
 
 ```query
+; Example 1: Highlight URL-like literal strings
 ; ~/.config/nvim/after/queries/python/highlights.scm
+;; extends
+(
+  (string) ; node type
+  @string  ; capture name (highlight group)
+)
+
 (
   (string_content) @string.special.url
   (#lua-match? @string.special.url "^https?://%S+$")
 )
 ```
 
-* Highlight inner function definitions
-
 ```query
+; Example 2: Highlight inner function definitions
 ; ~/.config/nvim/after/queries/python/highlights.scm
+;; extends
 (
   (
      function_definition
@@ -110,12 +117,18 @@ by editing queries that capture syntax nodes and assign highlight groups.
 )
 ```
 
+* Insight
+    * Query-based highlighting allows fine-grained customization beyond language defaults
+    * Predicates like `#lua-match?` enable pattern-based highlighting without parser changes
+
 ### Code folding with foldexpr
 
-`:set foldmethod=expr foldexpr=v:lua.vim.treesitter.foldexpr()`
-is also extensible
-
-* Select foldable node types
+* Usage
+    * `:set foldmethod=expr foldexpr=v:lua.vim.treesitter.foldexpr()`
+    * Enables structure-aware code folding based on syntax tree
+* Implementation
+    * Queries define which node types should be foldable
+    * `#trim!` directive removes whilespace from the fold range boundaries <!-- :h treesitter-directive-trim! -->
 
 ```query
 ; ~/.config/nvim/after/queries/markdown/folds.scm
@@ -124,13 +137,20 @@ is also extensible
 ;((fenced_code_block) @fold (#trim! @fold))
 ```
 
+* Insight
+    * Users can customize foldable structures per filetype without parser modification
+
 ### Language Injections
 
-To **parse** various languages in a language
-
-* Parse markdown code blocks
+* Usage
+    * Enable syntax highlighting and parsing for embedded languages
+        * Examples: code blocks in markdown, URLs in strings, SQL in code comments
+* Implementation
+    * Injection queries specify language and content regions
+    * `@injection.language` and `@injection.content` captures define boundaries
 
 ```query
+; Example 1: Parse markdown code blocks
 ; https://github.com/nvim-treesitter/nvim-treesitter/blob/846d51137b8cbc030ab94edf9dc33968ddcdb195/runtime/queries/markdown/injections.scm#L1-L4
 (fenced_code_block
   (info_string
@@ -138,9 +158,8 @@ To **parse** various languages in a language
   (code_fence_content) @injection.content)
 ```
 
-* Parse URL-like strings
-
 ```query
+; Example 2: Parse URL-like strings as URIs
 (
   (string_content) @injection.content
   (#vim-match? @injection.content "^[a-zA-Z][a-zA-Z0-9]*:\/\/\\S\+$")
@@ -148,7 +167,8 @@ To **parse** various languages in a language
 )
 ```
 
-* Parse literal string as URL
+* Insight
+    * Opens door to apply filetype-specific features (highlighting, folding, etc.) to embedded content
 
 ### Outline with `gO`
 
@@ -171,15 +191,19 @@ local heading_queries = {
 ```
 
 * Insight
-    * Query-based approach makes it extensible to other filetypes without modifying Lua code
+    * Query-based approach allows language-agnostic implementation
         * Opens door for user-defined queries as well
 
 ### Context-aware menu
 
 <https://github.com/neovim/neovim/blob/a04c73ca071fdc2461365a8a10a314bd0d1d806d/runtime/lua/vim/_defaults.lua?plain=1#L487-L489>
 
-* Conditionally adds `Open URL by browser` item to popup menu
-    * by examining URL metadata set by `set!` directive
+* Usage
+    * Right-click popup menu shows context-specific actions
+        * Example: "Open URL by browser" appears only when cursor is on URL
+* Implementation
+    * Lua code examines if the node has `url` metadata
+    * Queries use `#set!` directive to attach metadata to nodes
 
 ```query
 ; https://github.com/neovim/neovim/blob/a04c73ca071fdc2461365a8a10a314bd0d1d806d/runtime/queries/markdown_inline/highlights.scm?plain=1#L94-L96
@@ -188,6 +212,11 @@ local heading_queries = {
   (#set! @_url url @_url))
 ```
 
+* Insight
+    * Query-based approach allows language-agnostic implementation
+        * The choice of **capture name** and **metadata** is up to developers
+        * IMO, **metadata** is safer in terms of name collisions with highlight groups
+    * Custom metadata can power actions like "Run test", "Open docs", or "Preview"
 
 ## Usecases by plugins
 
