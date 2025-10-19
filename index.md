@@ -57,11 +57,19 @@ A parser generator tool & an incremental parsing library
 ## Is tree-sitter for syntax highlighting?
 
 - No, tree-sitter is just a parsing library
-- Highlighting is just an application of obtained AST
-- AST helps variety of usecases, such as:
+- Highlighting is just an application of parsed results
+- Applicable to variety of syntax-aware usecases:
     - Code folding
     - Smart selection (e.g., `if` function definition)
     - Outline
+
+---
+
+## What happens by parsing?
+
+- Identify node type of a token
+- Identify hierarchical structure of tokens
+- Allow querying nodes by type and structure
 
 ---
 
@@ -70,7 +78,7 @@ A parser generator tool & an incremental parsing library
 Unlocking the Power of Tree-sitter by...
 
 - Exploring various usecases beyond syntax highlighting
-- Show insightful patterns of tree-sitter integration
+- Showing insightful tree-sitter integration patterns
 - Introducing potential of treesitter-ls, a language server
 
 ---
