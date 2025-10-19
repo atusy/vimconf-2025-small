@@ -217,6 +217,19 @@ local heading_queries = {
         * The choice of **capture name** and **metadata** is up to developers
     * Custom metadata can power actions like "Run test", "Open docs", or "Preview"
 
+### Quick summary
+
+Common insights across builtin features:
+
+* Query-based approach enables **language-agnostic** implementation
+* Users can extend functionality by **adding custom queries**
+* **No parser/code modification** needed for customization
+
+This is **separation of concerns**:
+
+* **Queries** (declarative): Define **what** to extract (`@function`, `@fold`, metadata)
+* **Lua code** (imperative): Define **how** to process (highlight, fold, show menu)
+
 ## Usecases by plugins
 
 ### Highlight, navigate, and operate on sets of matching text
