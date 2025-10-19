@@ -290,9 +290,15 @@ local heading_queries = {
 
 ### Auto close keywords
 
-like `end`, `endif`, `}` , etc
+[RRethy/nvim-treesitter-endwise](https://github.com/RRethy/nvim-treesitter-endwise)
 
-[AbaoFromCUG/nvim-treesitter-endwise](https://github.com/AbaoFromCUG/nvim-treesitter-endwise)
+* Usage
+    * Automatically insert closing keywords (end, endif, fi, etc.)
+    * Example: Typing `if ... then` in lue automatically adds `end`
+* Implementation
+    * `endwise.scm` query to identify opening keywords, and specify corresponding closing keywords
+    * `endwise`-directive
+* Insight
 
 ### Label-hinting for region selections
 
