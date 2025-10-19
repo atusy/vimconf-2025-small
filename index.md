@@ -270,6 +270,24 @@ local heading_queries = {
 
 [nvim-treesitter/nvim-treesitter-context](https://github.com/nvim-treesitter/nvim-treesitter-context)
 
+* Usage
+    * Keep function/class headers visible at top of window while scrolling
+    * Similar to IDE sticky headers feature
+* Implementation
+    * Use queries to capture context nodes (`@context`)
+    * Just show first line of `@context` capture as is
+        * No need to know nest level
+
+```query
+; markdown
+; https://github.com/nvim-treesitter/nvim-treesitter-context/blob/41847d3dafb5004464708a3db06b14f12bde548a/queries/markdown/context.scm#L2
+((section) @context)
+```
+
+* Insight
+    * Yet another example of query-based approach
+    * Similar to outline, but does not care nest level
+
 ### Auto close keywords
 
 like `end`, `endif`, `}` , etc
