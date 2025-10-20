@@ -37,18 +37,18 @@ atusy
 
 ## What is tree-sitter in general
 
-A parser generator tool & an incremental parsing library
-
-- supports on diverse programming languages
-- fast enough to react text changes
-- robust user experience under syntax errors
+- **Parsing library** (enough for today)
+- More specifically, a parser generator tool & an incremental parsing library
+    - supports on diverse programming languages
+    - fast enough to react text changes
+    - robust user experience under syntax errors
 
 ---
 
 ## What is tree-sitter in Neovim/Vim?
 
 - In Neovim
-    - Builtin feature to interact with syntax tree, especially for syntax highlighting
+    - Builtin feature to support syntax-aware featues, e.g. syntax highlighting
 - In Vim
     - Opt-in feature to enable syntax highlighting ([mattn/vim-treesitter](https://github.com/mattn/vim-treesitter))
 
@@ -57,29 +57,30 @@ A parser generator tool & an incremental parsing library
 ## Is tree-sitter for syntax highlighting?
 
 - No, tree-sitter is just a parsing library
-- Highlighting is just an application of parsed results
-- Applicable to variety of syntax-aware usecases:
+- Applicable to variety of syntax-aware features
+    - Highlighting
     - Code folding
-    - Smart selection (e.g., `if` function definition)
+    - Smart selection (e.g., function definition)
     - Outline
 
 ---
 
 ## What happens by parsing?
 
-- Identify node type of a token
-- Identify hierarchical structure of tokens
+- Identify node type of a region
+    - function definition, string literal, assignment expression, ...
+- Identify hierarchical structure of nodes
 - Allow querying nodes by type and structure
 
 ---
 
-## Today's talk
+## Today's goal
 
-Unlocking the Power of Tree-sitter by...
+Be aware of tree-sitter as a tool to build your own workflow by
 
-- Exploring various usecases beyond syntax highlighting
+- Exploring usecases beyond syntax highlighting
 - Showing insightful tree-sitter integration patterns
-- Introducing potential of treesitter-ls, a language server
+- Developing treesitter-ls, a language server
 
 ---
 
@@ -102,13 +103,11 @@ from variety of features
 
 ---
 
-### How many are the builtin
+### How many are the builtin?
 
 <style scoped>
-ol, p { font-size: 1.7rem }
+ol, p { font-size: 1.9rem }
 </style>
-
-among the 10 tree-sitter powered features?
 
  1. Syntax highlighting
  2. Code folding
@@ -123,11 +122,11 @@ among the 10 tree-sitter powered features?
 
 ---
 
-### The answer is ...
+### The answer is ... 7/10
 
-* 7/10, and there are more builtin features.
-* The power of tree-sitter is already unlocked in Neovim!!
-* If you use Vim, sorry for inconvenience..., but I have a good news today
+- There are more builtin features
+- The power of tree-sitter is already unlocked in Neovim!!
+- If you use Vim, sorry for inconvenience..., but I have a good news today
 
 ---
 
@@ -136,7 +135,7 @@ among the 10 tree-sitter powered features?
 - Usage
     - `vim.treesitter.start()` enables tree-sitter-based syntax highlighting
 - Implementation
-    - Queries capture syntax nodes and assign highlight groups
+    - **Queries** capture syntax nodes and assign highlight groups
     - User can extend by adding custom queries
 
 ---
@@ -218,8 +217,8 @@ among the 10 tree-sitter powered features?
 
 ```query
 ((section) @fold (#trim! @fold))
-;((list) @fold (#trim! @fold))
-;((fenced_code_block) @fold (#trim! @fold))
+((list) @fold (#trim! @fold))
+((fenced_code_block) @fold (#trim! @fold))
 ```
 
 ---
@@ -499,7 +498,7 @@ Some of my favorites...
 [tsnode-marker.nvim](https://github.com/atusy/tsnode-marker.nvim)
 
 - Usage
-    - Highlgiht nodes that satisfies user-specified callback functions
+    - Highlgiht nodes that satisfies user-specified callback functions or `@tsnodemarker` capture
     - Supports highlighting to the end of the line
 
 ---
@@ -515,7 +514,9 @@ Some of my favorites...
 ### Extra highlight for special nodes
 
 - Implementation
-    - Pass node at the cursor to user-defined callback functions
+    - Find a node that satisfies one of
+        - `@tsnodemarker` highlight capture
+        -  User-defined callback functions
     - Applies additional highlights via extmarks
 
 ---
@@ -666,7 +667,7 @@ To unlock various possibilities:
 ### Why treesitter-ls?
 
 3. Unlock **difficulty** to support niche or emerging languages
-    - Just ship a Tree-sitter parser + queries instead of a full server
+    - Just ship a tree-sitter parser + queries instead of a full server
     - Developer productivity **boost for new languages**
 
 
@@ -675,7 +676,7 @@ To unlock various possibilities:
 ### Why treesitter-ls?
 
 4. Unlock **injected-language workflows**
-    - Use Tree-sitter injections for code blocks, template strings, and DSLs
+    - Use tree-sitter injections for code blocks, template strings, and DSLs
     - By [treesitter-ls](https://github.com/atusy/treesitter-ls) itself being LSP-client
         - Receive LSP-config from editor, and attach language servers for injected languages automatically
 
@@ -683,10 +684,10 @@ To unlock various possibilities:
 
 ## ENJOY!!
 
-- Tree-sitter is not just for syntax highlighting
-- Tree-sitter helps variety of syntax-aware usecases
-    - e.g., code folding, outline, sticky scroll, range selection, and more
-- Treesitter-ls aims to bring tree-sitter power to any LSP-capable editor
+- Tree-sitter powers variety of syntax-aware usecases
+    - e.g., highlighting, code folding, outline, sticky scroll, range selection, and more
+- Build your own tree-sitter powered tools
+- Star my [treesitter-ls](https://github.com/atusy/treesitter-ls) which aims to bring tree-sitter power to any LSP-capable editor
 
 <style>
 section {
