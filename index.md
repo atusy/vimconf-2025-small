@@ -6,13 +6,14 @@ paginate: true
 
 ## Unlocking the Power of Tree-sitter in Neovim
 
-atusy
+![height:1em](images/headphone.jpg) atusy
 
 ---
 
-## atusy
+## ![height:1em](images/headphone.jpg) atusy
 
 - <https://github.com/atusy>
+- <https://x.com/Atsushi776>
 - <https://blog.atusy.net>
 
 ---
@@ -21,7 +22,7 @@ atusy
 
 - **3-shake Inc.**
     - The Bronze sponsor of VimConf 2025 small
-    - My previous employer
+    - My former employer
 - **Atmark Inc.**
     - My current employer
 
@@ -147,7 +148,6 @@ ol, p { font-size: 1.9rem }
 <!-- ~/.config/nvim/after/queries/python/highlights.scm -->
 
 ```query
-;; extends
 (
   (string) ; node type
   @string  ; capture name (highlight group)
