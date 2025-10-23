@@ -509,6 +509,8 @@ Some of my favorites...
     - Highlight markdown fenced code blocks
     - Highlight nested function definitions
 
+<!-- show demo what happens if highlight is done only by builtin feature -->
+
 ---
 
 ### Extra highlight for special nodes
