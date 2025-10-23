@@ -145,8 +145,6 @@ ol, p { font-size: 1.9rem }
 
 - Example 1: Highlight URL-like literal strings
 
-<!-- ~/.config/nvim/after/queries/python/highlights.scm -->
-
 ```query
 (
   (string) ; node type
