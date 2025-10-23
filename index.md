@@ -141,7 +141,7 @@ ol, p { font-size: 1.9rem }
 
 ---
 
-#### Syntax Highlighting
+### Syntax Highlighting
 
 - Example 1: Highlight URL-like literal strings
 
@@ -179,7 +179,7 @@ ol, p { font-size: 1.9rem }
 
 ---
 
-#### Syntax Highlighting
+### Syntax Highlighting
 
 - Insight
     - Query-based highlighting allows fine-grained customization beyond language defaults
