@@ -7,6 +7,11 @@ vim.api.nvim_set_hl(0, "@string.special.url.uri", { underline = true })
 vim.api.nvim_set_hl(0, "@string.special.url.path.uri", { reverse = true })
 vim.api.nvim_set_hl(0, "@string.special.url.path.python", { reverse = true })
 
+vim.o.foldmethod = "expr"
+vim.o.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+vim.o.foldtext = ""
+vim.o.foldlevel = 99
+
 local enable_tsnode_marker = true
 
 if not enable_tsnode_marker then
