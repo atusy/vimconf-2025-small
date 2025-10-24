@@ -416,7 +416,7 @@ Some of my favorites...
 
 ---
 
-### Show context after functions, methods, statements, etc.
+### Show context at the ends of functions, methods, statements, ...
 
 [haringsrob/nvim_context_vt](https://github.com/haringsrob/nvim_context_vt)
 
@@ -425,7 +425,7 @@ Some of my favorites...
 
 ---
 
-### Show context after functions, methods, statements, etc.
+### Show context at the ends of functions, methods, statements, ...
 
 - Key concepts
     - List node types to show context
@@ -434,7 +434,7 @@ Some of my favorites...
 
 ---
 
-### Show context after functions, methods, statements, etc.
+### Show context at the ends of functions, methods, statements, ...
 
 - Insight
     - Parser-based approach can provide extensibility with less setup
@@ -471,7 +471,7 @@ Some of my favorites...
 
 ### Label-hinting for region selections
 
-[treemonkey.nvim](https://github.com/atusy/treemonkey.nvim)
+[atusy/treemonkey.nvim](https://github.com/atusy/treemonkey.nvim)
 
 - Usage
     - Show label hints for quickly selecting tree-sitter nodes
@@ -496,7 +496,7 @@ Some of my favorites...
 
 ### Extra highlight for special nodes
 
-[tsnode-marker.nvim](https://github.com/atusy/tsnode-marker.nvim)
+[atusy/tsnode-marker.nvim](https://github.com/atusy/tsnode-marker.nvim)
 
 - Usage
     - Highlgiht nodes that satisfies user-specified callback functions or `@tsnodemarker` capture
@@ -547,7 +547,6 @@ Some of my favorites...
 3. Textobjects
     - [nvim-treesitter/nvim-treesitter-textobjects](https://github.com/nvim-treesitter/nvim-treesitter-textobjects)
 4. Commenting
-    - [nvim-mini/mini.comment](https://github.com/nvim-mini/mini.comment)
     - [numToStr/Comment.nvim](https://github.com/numToStr/Comment.nvim) + [JoosepAlviste/nvim-ts-context-commentstring](https://github.com/JoosepAlviste/nvim-ts-context-commentstring)
 
 ---
@@ -565,9 +564,9 @@ Some of my favorites...
 
 ### Quick summary of approaches
 
-1. **Query**-based approach
+1. **Query**-based
     - requires query per lanuguage, but highly declarative
-2. **Parser-based**
+2. **Parser**-based
     - requires Lua code to do everything
     - (partially) language-agnostic logic using common node types
 
@@ -575,11 +574,11 @@ Some of my favorites...
 
 ### Quick summary of approaches
 
-3. **Callback-based**
+3. **Callback**-based
     - requires user-defined Lua functions
     - allows maximum flexibility
-4. **Tree-traversal**
-    - applicable iff only tree structure matters
+4. **Tree-traversal**-based
+    - applies iff only tree structure matters
 
 ---
 
