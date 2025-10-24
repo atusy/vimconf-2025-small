@@ -684,10 +684,10 @@ To unlock various possibilities:
 
 ## ENJOY!!
 
-- Tree-sitter powers variety of syntax-aware usecases
+- Syntax-aware features are powerful
     - e.g., highlighting, code folding, outline, sticky scroll, range selection, and more
-- Build your own tree-sitter powered tools
-- Star my [treesitter-ls](https://github.com/atusy/treesitter-ls) which aims to bring tree-sitter power to any LSP-capable editor
+- Tree-sitter helps building your usecases
+- Star [atusy/treesitter-ls](https://github.com/atusy/treesitter-ls) that brings tree-sitter power to any LSP-capable editor
 
 <style>
 section {
