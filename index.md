@@ -388,8 +388,8 @@ Some of my favorites...
 ### Navigate and highlight matching keywords
 
 - Key concepts
-    - Find keywords based on original queries
-    - Loads queries with own file name, `matchup.scm`, and avoids conflicts with other plugins
+    - Query captures opening/closing keywords
+    - Loads special query files, `matchup.scm`, and avoids conflicts with other queries such as `highlights.scm` and `folds.scm`
 
 ---
 
