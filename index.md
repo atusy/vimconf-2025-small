@@ -97,7 +97,7 @@ Be aware of tree-sitter as a tool to build your own workflow by
 Let's learn
 
 - Usage
-- Implementation
+- Key concepts
 - Insight
 
 from variety of features
@@ -133,57 +133,84 @@ ol, p { font-size: 1.9rem }
 
 ### Syntax Highlighting
 
+![bg fit](images/example-highlight.png)
+
+---
+
+
+### Syntax Highlighting
+
 - Usage
     - `vim.treesitter.start()` enables tree-sitter-based syntax highlighting
-- Implementation
-    - **Queries** capture syntax nodes and assign highlight groups
-    - User can extend by adding custom queries
 
 ---
 
 ### Syntax Highlighting
 
-- Example 1: Highlight URL-like literal strings
+- Key concepts
+    - **Parser** determines code structure
+        - e.g., `"foo"` is `string` node
+    - **Query** captures what to highlight
+        - e.g., `(string) @string`
+    - **Captures** are equal to highlight groups
+        - e.g., `:hi @string guifg=Black`
+
+---
+
+### Syntax Highlighting
+
+- Demo with `examples/url.py` and `runtime/queries/python/highlights.scm`
+    1. Highlight nothing
+    1. Highlight `comment` and `string`
+    1. Highlight all `string_content` in `string`
+    1. Highlight only URL-like `string_content`
+
+---
+
+### Syntax Highlighting
+
+- Example 1
+    - Query `string` nodes
 
 ```query
-(
-  (string) ; node type
-  @string  ; capture name (highlight group)
-)
-
-(
-  (string_content) @string.special.url
-  (#lua-match? @string.special.url "^https?://%S+$")
-)
+; node    ->  capture (highlight group)
+(string)      @string
 ```
 
 ---
 
-#### Syntax Highlighting
+### Syntax Highlighting
 
-- Example 2: Highlight inner function definitions
+- Example 2
+    - Query URL-like `string_content`
+        - by testing nest pattern and regex
 
-<!-- ~/.config/nvim/after/queries/python/highlights.scm -->
-
-```query
-;; extends
+``` query
 (
-  (
-     function_definition
-     body: (
-       block (function_definition) @function.inner
-     )
-  )
+  string (string_content) @string.special.url
+  (#match? @string.special.url "^https?://\\S+$")
 )
 ```
+
+<!--
+Demo scenario
+
+- Open examples/url.py
+    - Start with blank query
+    - Add `((string) @string)`
+    - Add `((string) (string_content) @string.special.url)`
+    - Update the above to `((string) (string_content) @string.special.url) (#match? @string.special.url "^https?://\\S+$")`
+-->
 
 ---
 
 ### Syntax Highlighting
 
 - Insight
-    - Query-based highlighting allows fine-grained customization beyond language defaults
-    - Predicates like `#lua-match?` enable pattern-based highlighting without parser changes
+    - Query can capture complex pattern of nodes
+        - e.g., nest pattern and regex pattern
+    - Query is customizable
+    - Users can define what to highlight per filetype without parser modification
 
 ---
 
@@ -201,23 +228,11 @@ ol, p { font-size: 1.9rem }
 
 ### Code folding with foldexpr
 
-- Implementation
-    - Queries define **foldable** node types
-    - `#trim!` directive trims whilespace from the fold range boundaries <!-- :h treesitter-directive-trim! -->
-
----
-
-### Code folding with foldexpr
-
-<!-- ~/.config/nvim/after/queries/markdown/folds.scm -->
-
-- Example in markdown
-
-```query
-((section) @fold (#trim! @fold))
-((list) @fold (#trim! @fold))
-((fenced_code_block) @fold (#trim! @fold))
-```
+- Key concepts
+    - Query determins what to fold
+        - e.g., `(function_definition) @fold`
+    - Neovim determines how to fold
+        - by calculating fold levels of the captures
 
 ---
 
@@ -228,25 +243,33 @@ ol, p { font-size: 1.9rem }
 
 ---
 
+<!-- ### Language Injections -->
+
+![bg fit](images/example-injection.png)
+
+---
+
 ### Language Injections
 
 - Usage
     - Apply tree-sitter features to embedded languages by recursive parsing
-        - e.g., highlight markdown code blocks
+        - e.g., highlight code blocks
 
 ---
 
 ### Language Injections
 
-- Implementation
-    - Injection queries specify language and content regions
-    - `@injection.language` and `@injection.content` captures define boundaries
+- Key concepts
+    - Query determines what to inject
+        - embedded source codes as `@injection.content`
+        - corresponding languages as `@injection.language`
 
 ---
 
 ### Language Injections
 
-- Example 1: Parse markdown code blocks
+- Example 1
+    - Parse markdown code blocks
 
 ```query
 (fenced_code_block
@@ -255,21 +278,19 @@ ol, p { font-size: 1.9rem }
   (code_fence_content) @injection.content)
 ```
 
-[Source in nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter/blob/846d51137b8cbc030ab94edf9dc33968ddcdb195/runtime/queries/markdown/injections.scm#L1-L4)
-
 ---
 
 ### Language Injections
 
-- Example 2: Parse URL-like strings as URIs
+- Example 2 <!-- optional -->
+    - Parse URL-like strings as URIs
 
 ```query
 (
   (string_content) @injection.content
   (
-      #vim-match?
-      @injection.content
-      "^[a-zA-Z][a-zA-Z0-9]*:\/\/\\S\+$"
+      #match? @injection.content 
+      "^[a-zA-Z][a-zA-Z0-9]*://\\S+$"
   )
   (#set! injection.language "uri")
 )
@@ -280,70 +301,43 @@ ol, p { font-size: 1.9rem }
 ### Language Injections
 
 - Insight
-    - Opens door to apply filetype-specific features (highlighting, folding, etc.) to embedded content
-
----
-
-### Outline with `gO`
-
-[Source in Neovim](https://github.com/neovim/neovim/blob/a04c73ca071fdc2461365a8a10a314bd0d1d806d/runtime/lua/vim/treesitter/_headings.lua?plain=1#L9-L14)
-
-- Usage
-    - Outlines headings in `vimdoc` and `markdown`
-
----
-
-### Outline with `gO`
-
-- Implementation
-    - Custom queries to capture heading nodes
-
-```query
-; vimdoc
-(h1 (heading) @h1)
-(h2 (heading) @h2)
-(h3 (heading) @h3)
-(column_heading (heading) @h4)
-```
-
----
-
-### Outline with `gO`
-
-
-- Insight
-    - Query-based approach separates concerns
-        - Query defines **what** to process
-          (headings)
-        - Lua code defines **how** to process
-          (outline display)
+    - Opens door to apply language-specific features (highlighting, folding, etc.) to embedded content
 
 ---
 
 ### Context-aware popup menu
 
-[Source in Neovim](https://github.com/neovim/neovim/blob/a04c73ca071fdc2461365a8a10a314bd0d1d806d/runtime/lua/vim/_defaults.lua?plain=1#L487-L489)
+![bg fit](images/example-popupmenu.png)
+
+---
+
+### Context-aware popup menu
+
+<!-- [Source in Neovim](https://github.com/neovim/neovim/blob/a04c73ca071fdc2461365a8a10a314bd0d1d806d/runtime/lua/vim/_defaults.lua?plain=1#L487-L489) -->
 
 - Usage
     - Right-click popup menu shows context-specific actions
 - Example
-    - "Open URL by browser" appears only when cursor is on URL
+    - "Open in web browser" for URL-related nodes
 
 ---
 
 ### Context-aware popup menu
 
-- Implementation
+- Key concepts
+    - Query assigns `url` metadata to nodes
     - Lua code tests if the node has `url` metadata
-    - `#set!` directive assigns node metadata
 
 ```query
-((uri_autolink) @_url
-  (#offset! @_url 0 1 0 -1)
-  (#set! @_url url @_url))
+(
+  (inline_link
+      (link_destination) @_url
+  ) @_label
+  (#set! @_label url @_url)
+)
 ```
 
-[Source in Neovim](https://github.com/neovim/neovim/blob/a04c73ca071fdc2461365a8a10a314bd0d1d806d/runtime/queries/markdown_inline/highlights.scm?plain=1#L94-L96)
+<!-- [Source in Neovim](https://github.com/neovim/neovim/blob/a04c73ca071fdc2461365a8a10a314bd0d1d806d/runtime/queries/markdown_inline/highlights.scm?plain=1#L94-L96) -->
 
 
 ---
@@ -351,9 +345,7 @@ ol, p { font-size: 1.9rem }
 ### Context-aware popup menu
 
 - Insight
-    - Query-based separates concerns
-        - The choice of **capture name** and **metadata** is up to developers
-    - Custom metadata can power actions like "Run test", "Open docs", or "Preview"
+    - Set **metadata** to detemine complex pattern of what to process
 
 ---
 
@@ -362,8 +354,19 @@ ol, p { font-size: 1.9rem }
 - Neovim has variety of tree-sitter powered features
 - **Query-based approach** is a common pattern
     - Queries define **what** to process
-    - Lua code defines **how** to process
-- Use **custom queries** to extend query-based behavior
+    - Neovim APIs define **how** to process
+- **Customize queries** to extend query-based behavior
+
+---
+
+## Tips
+
+- View parse results with `:InspectTree`
+- Test query with `:EditQuery`
+- Find query examples at
+  <https://github.com/nvim-treesitter/nvim-treesitter/tree/main>
+- Find documents by `:h treesitter`
+
 
 ---
 
@@ -384,7 +387,7 @@ Some of my favorites...
 
 ### Navigate and highlight matching keywords
 
-- Implementation
+- Key concepts
     - Find keywords based on original queries
     - Loads queries with own file name, `matchup.scm`, and avoids conflicts with other plugins
 
@@ -424,7 +427,7 @@ Some of my favorites...
 
 ### Show context after functions, methods, statements, etc.
 
-- Implementation
+- Key concepts
     - List node types to show context
         - Hard coded, but still extensible
         - Avoiding queries per language with the help of common node types ([source](https://github.com/andersevenrud/nvim_context_vt/blob/fadbd9e57af72f6df3dd33df32ee733aa01cdbc0/lua/nvim_context_vt/config.lua#L19-L58))
@@ -451,7 +454,7 @@ Some of my favorites...
 
 ### Sticky scroll
 
-- Implementation
+- Key concepts
     - Use queries to capture context nodes (`@context`)
     - Just show first line of `@context` capture as is
         - No need to know nest level unlike outline
@@ -478,7 +481,7 @@ Some of my favorites...
 
 ### Label-hinting for region selections
 
-- Implementation
+- Key concepts
     - Get node range of anscestor nodes by traversing syntax tree from the cursor position
 
 ---
@@ -513,7 +516,7 @@ Some of my favorites...
 
 ### Extra highlight for special nodes
 
-- Implementation
+- Key concepts
     - Find a node that satisfies one of
         - `@tsnodemarker` highlight capture
         -  User-defined callback functions
