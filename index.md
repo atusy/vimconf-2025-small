@@ -688,7 +688,7 @@ To unlock various possibilities:
 
 - Syntax-aware features are powerful
     - e.g., highlighting, code folding, outline, sticky scroll, range selection, and more
-- Tree-sitter helps building your usecases
+- Use tree-sitter to implement syntax-aware features
 - Star [atusy/treesitter-ls](https://github.com/atusy/treesitter-ls) that brings tree-sitter power to any LSP-capable editor
 
 <style>
