@@ -9,11 +9,12 @@ video,img {
   object-fit: contain;
   border: 1px solid #888;
 }
+h1 {
+  font-size: 1.3em;
+}
 </style>
 
-# Beyond Syntax Highlighting
-
-## Unlocking the Power of Tree-sitter in Neovim
+# Beyond Syntax Highlighting in Neovim: <br> Unlocking the Power of Tree-sitter
 
 ![height:1em](images/headphone.jpg) atusy
 
