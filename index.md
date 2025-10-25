@@ -2,6 +2,15 @@
 paginate: true
 ---
 
+<style>
+video,img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border: 1px solid #888;
+}
+</style>
+
 # Beyond Syntax Highlighting
 
 ## Unlocking the Power of Tree-sitter in Neovim
@@ -113,7 +122,7 @@ ol, p { font-size: 1.9rem }
  1. Syntax highlighting
  2. Code folding
  3. Outline
- 4. Pairing keywords (like matchit/matchup)
+ 4. Pairing keywords (like matchit)
  5. Toggling comments
  6. Popup menu (e.g., Open URL)
  7. Open help in browser
@@ -133,15 +142,10 @@ ol, p { font-size: 1.9rem }
 
 ### Syntax Highlighting
 
-![bg fit](images/example-highlight.png)
-
----
-
-
-### Syntax Highlighting
-
 - Usage
-    - `vim.treesitter.start()` enables tree-sitter-based syntax highlighting
+    - `vim.treesitter.start()` to start syntax highlighting
+
+![](images/example-highlight.png)
 
 ---
 
@@ -245,7 +249,7 @@ Demo scenario
 
 <!-- ### Language Injections -->
 
-![bg fit](images/example-injection.png)
+![](images/example-injection.png)
 
 ---
 
@@ -307,7 +311,10 @@ Demo scenario
 
 ### Context-aware popup menu
 
-![bg fit](images/example-popupmenu.png)
+- Usage
+    - Right-click popup menu shows context-specific actions
+
+![](images/example-popupmenu.png)
 
 ---
 
@@ -315,8 +322,6 @@ Demo scenario
 
 <!-- [Source in Neovim](https://github.com/neovim/neovim/blob/a04c73ca071fdc2461365a8a10a314bd0d1d806d/runtime/lua/vim/_defaults.lua?plain=1#L487-L489) -->
 
-- Usage
-    - Right-click popup menu shows context-specific actions
 - Example
     - "Open in web browser" for URL-related nodes
 
@@ -376,20 +381,31 @@ Some of my favorites...
 
 ---
 
-### Navigate and highlight matching keywords
+### Navigate open/mid/close keywords
 
 [andymass/vim-matchup](https://github.com/andymass/vim-matchup)
 
+<video src="images/example-matchup.mp4" controls></video>
+
+---
+
+### Navigate and highlight matching keywords
+
+
 - Usage
-    - Navigate and highlight matching keywords (if/endif, def/end, quotes, etc.)
+    - Navigate and highlight matching keywords
+        - keywords: `if`/`else`/`end`, ...
+        - quotes: `""`, `''`, ``` `` ```, ...
+        - braces: `()`, `[]`, `{}`, ...
 
 ---
 
 ### Navigate and highlight matching keywords
 
 - Key concepts
-    - Query captures opening/closing keywords
-    - Loads special query files, `matchup.scm`, and avoids conflicts with other queries such as `highlights.scm` and `folds.scm`
+    - Query captures open/mid/close nodes
+    - Uses special query files, `matchup.scm`
+        - This avoids conflicts with other queries such as `highlights.scm` and `folds.scm`
 
 ---
 
@@ -420,6 +436,13 @@ Some of my favorites...
 
 [haringsrob/nvim_context_vt](https://github.com/haringsrob/nvim_context_vt)
 
+![](images/example-context-vt.png)
+
+---
+
+### Show context at the ends of functions, methods, statements, ...
+
+
 - Usage
     - Shows virtual text of the current context after functions, methods, statements, etc.
 
@@ -428,17 +451,17 @@ Some of my favorites...
 ### Show context at the ends of functions, methods, statements, ...
 
 - Key concepts
-    - List node types to show context
-        - Hard coded, but still extensible
-        - Avoiding queries per language with the help of common node types ([source](https://github.com/andersevenrud/nvim_context_vt/blob/fadbd9e57af72f6df3dd33df32ee733aa01cdbc0/lua/nvim_context_vt/config.lua#L19-L58))
+    - List node types to show context in Lua
+        - Some are common across parsers and allows partially language-agnostic implementation (e.g., function_definition)
+        - The list can be modified by users
 
 ---
 
 ### Show context at the ends of functions, methods, statements, ...
 
 - Insight
-    - Parser-based approach can provide extensibility with less setup
     - Parser-based approach can be less language-specific because parsers tend to share common node types
+    - Parser-based approach can provide extensibility with less setup
 
 ---
 
@@ -567,7 +590,7 @@ Some of my favorites...
 1. **Query**-based
     - requires query per lanuguage, but highly declarative
 2. **Parser**-based
-    - requires Lua code to do everything
+    - requires Lua code identify what to process
     - (partially) language-agnostic logic using common node types
 
 ---
