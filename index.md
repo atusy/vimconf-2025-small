@@ -30,10 +30,10 @@ h1 {
 
 ## Special Thanks
 
-- **3-shake Inc.**
+- **[3-shake Inc.](https://3-shake.com/)**
     - The Bronze sponsor of VimConf 2025 small
     - My former employer
-- **Atmark Inc.**
+- **[Atmark Inc.](https://attm.co.jp/)**
     - My current employer
 
 ---
@@ -470,9 +470,17 @@ Some of my favorites...
 
 [nvim-treesitter/nvim-treesitter-context](https://github.com/nvim-treesitter/nvim-treesitter-context)
 
+![](images/example-sticky-scroll.png)
+
+
+---
+
+### Sticky scroll
+
 - Usage
-    - Keep function/class headers visible at top of window while scrolling
-    - Similar to IDE sticky headers feature
+    - Show parent contexts at the top of the window
+        - Markdown headings
+        - Function/method/class definitions
 
 ---
 
@@ -480,8 +488,8 @@ Some of my favorites...
 
 - Key concepts
     - Use queries to capture context nodes (`@context`)
-    - Just show first line of `@context` capture as is
-        - No need to know nest level unlike outline
+    - Show first line of `@context` capture as is
+        - No need to know nest levels
 
 ---
 
@@ -489,32 +497,39 @@ Some of my favorites...
 
 - Insight
     - Yet another example of query-based approach
-    - Similar to outline, but does not care nest level
 
 ---
 
-### Label-hinting for region selections
+### Quickly select syntactic regions
 
 [atusy/treemonkey.nvim](https://github.com/atusy/treemonkey.nvim)
 
+<video src="images/example-treemonkey.mp4" controls></video>
+
+
+---
+
+### Quickly select syntactic regions
+
 - Usage
-    - Show label hints for quickly selecting tree-sitter nodes
+    - Quickly select syntactic regions by label hints
+
+---
+
+### Quickly select syntactic regions
+
+- Key concepts
+    - Get node ranges of anscestor nodes by traversing syntax tree from the cursor position
     - Use two-step selection to avoid ambiguity of overlapping label hints
 
 ---
 
-### Label-hinting for region selections
-
-- Key concepts
-    - Get node range of anscestor nodes by traversing syntax tree from the cursor position
-
----
-
-### Label-hinting for region selections
+### Quickly select syntactic regions
 
 - Insight
     - The tree structure is only the interest
-        - no interest in node types or query-captured names
+        - No interests in node types or query-captured names
+        - Parser-agnostic and query-free
 
 ---
 
@@ -522,8 +537,16 @@ Some of my favorites...
 
 [atusy/tsnode-marker.nvim](https://github.com/atusy/tsnode-marker.nvim)
 
+![](images/example-tsnode-marker-md.png)
+
+---
+
+### Extra highlight for special nodes
+
+
+
 - Usage
-    - Highlgiht nodes that satisfies user-specified callback functions or `@tsnodemarker` capture
+    - Highlight nodes that satisfy conditions
     - Supports highlighting to the end of the line
 
 ---
@@ -533,6 +556,8 @@ Some of my favorites...
 - Examples
     - Highlight markdown fenced code blocks
     - Highlight nested function definitions
+
+![](images/example-tsnode-marker-py.png)
 
 <!-- show demo what happens if highlight is done only by builtin feature -->
 
@@ -589,20 +614,21 @@ Some of my favorites...
 ### Quick summary of approaches
 
 1. **Query**-based
-    - requires query per lanuguage, but highly declarative
+    - Highly declarative
+    - Requires query per lanuguage
 2. **Parser**-based
-    - requires Lua code identify what to process
-    - (partially) language-agnostic logic using common node types
+    - Requires Lua code identify what to process
+    - Partially language-agnostic logic with the help of common node types
 
 ---
 
 ### Quick summary of approaches
 
 3. **Callback**-based
-    - requires user-defined Lua functions
-    - allows maximum flexibility
+    - Requires user-defined Lua functions
+    - Allows maximum flexibility
 4. **Tree-traversal**-based
-    - applies iff only tree structure matters
+    - Applies iff only tree structure matters
 
 ---
 
