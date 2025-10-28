@@ -441,8 +441,8 @@ Some of my favorites...
 ### Navigate and highlight matching keywords
 
 - Insight
-    - Query-based approach allows Lua code focus on "how" in language-agnostic way.
-    - Plugin-specific query files is a good pattern to avoid conflicts among multiple plugins
+    - **Query defines what** to match in language-specific way, and let **Lua code handle how** in language-agnostic way
+    - **Plugin-specific query files** is a good pattern to avoid conflicts among multiple plugins
 
 ---
 
@@ -465,9 +465,9 @@ Some of my favorites...
 ### Show context at the ends of functions, methods, statements, ...
 
 - Implementation pattern
-    - [Hard code node types](https://github.com/andersevenrud/nvim_context_vt/blob/fadbd9e57af72f6df3dd33df32ee733aa01cdbc0/lua/nvim_context_vt/config.lua#L18-L180) to show context in Lua
+    - [Hard code node types](https://github.com/andersevenrud/nvim_context_vt/blob/fadbd9e57af72f6df3dd33df32ee733aa01cdbc0/lua/nvim_context_vt/config.lua#L18-L180) in Lua, no queries
+        - Heavy dependence on parsers
         - Common node types allow partially language-agnostic implementation (e.g., function_definition)
-        - The list can be modified by users
 
 ---
 
@@ -475,7 +475,6 @@ Some of my favorites...
 
 - Insight
     - Parser-based approach can be less language-specific because parsers tend to share common node types
-    - Parser-based approach can provide extensibility with less setup
 
 ---
 
