@@ -88,7 +88,7 @@ h1 {
 
 ---
 
-## What happens by parsing?
+## What can be done by parsing?
 
 - Identify node type of a region
     - function definition, string literal, assignment expression, ...
