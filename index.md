@@ -119,7 +119,7 @@ Be aware of tree-sitter as a tool to build your own workflow by
 Let's learn
 
 - Usage
-- Key concepts
+- Implementation pattern
 - Insight
 
 from variety of features
@@ -135,7 +135,7 @@ ol, p { font-size: 1.9rem }
  1. Syntax highlighting
  2. Code folding
  3. Outline
- 4. Pairing keywords (like matchit)
+ 4. Pairing keywords (like matchpair)
  5. Toggling comments
  6. Popup menu (e.g., Open URL)
  7. Open help in browser
@@ -164,7 +164,7 @@ ol, p { font-size: 1.9rem }
 
 ### Syntax Highlighting
 
-- Key concepts
+- Implementation pattern
     - **Parser** determines code structure
         - e.g., `"foo"` is `string` node
     - **Query** captures what to highlight
@@ -245,7 +245,7 @@ Demo scenario
 
 ### Code folding with foldexpr
 
-- Key concepts
+- Implementation pattern
     - Query determins what to fold
         - e.g., `(function_definition) @fold`
     - Neovim determines how to fold
@@ -276,7 +276,7 @@ Demo scenario
 
 ### Language Injections
 
-- Key concepts
+- Implementation pattern
     - Query determines what to inject
         - embedded source codes as `@injection.content`
         - corresponding languages as `@injection.language`
@@ -342,7 +342,7 @@ Demo scenario
 
 ### Context-aware popup menu
 
-- Key concepts
+- Implementation pattern
     - Query assigns `url` metadata to nodes
     - Lua code tests if the node has `url` metadata
 
@@ -369,21 +369,19 @@ Demo scenario
 
 ## Quick summary 1
 
-- Neovim has variety of tree-sitter powered features
 - **Query-based approach** is a common pattern
-    - Queries define **what** to process
-    - Neovim APIs define **how** to process
-- **Customize queries** to extend query-based behavior
+    - Queries define **what** to process in language-specific way
+    - Neovim APIs define **how** to process (often) in language-agnostic way
+- **Customize queries** to meet your needs
 
 ---
 
-## Tips
+## Tips to get started with queries
 
+- See `:h lua-treesitter-query` for how to interact with queries in Lua
 - View parse results with `:InspectTree`
 - Test query with `:EditQuery`
-- Find query examples at
-  <https://github.com/nvim-treesitter/nvim-treesitter/tree/main>
-- Find documents by `:h treesitter`
+- Examples queries at <small> <https://github.com/nvim-treesitter/nvim-treesitter/tree/main> </small>
 
 
 ---
@@ -415,7 +413,7 @@ Some of my favorites...
 
 ### Navigate and highlight matching keywords
 
-- Key concepts
+- Implementation pattern
     - Query captures open/mid/close nodes
     - Uses special query files, `matchup.scm`
         - This avoids conflicts with other queries such as `highlights.scm` and `folds.scm`
@@ -424,7 +422,9 @@ Some of my favorites...
 
 ### Navigate and highlight matching keywords
 
-- Example from .../queries/lua/**matchup.scm**
+- Example query for Lua loops
+
+<small> [https://github.com/andymass/vim-matchup/blob/ca538c3b/after/queries/lua/**matchup.scm**?plain=1#L3-L5](https://github.com/andymass/vim-matchup/blob/ca538c3bb02836510526ff7d07cf7e4c8e9a3b90/after/queries/lua/matchup.scm?plain=1#L3-L5) </small>
 
 ```query
 (
@@ -435,12 +435,13 @@ Some of my favorites...
 ```
 
 
+
 ---
 
 ### Navigate and highlight matching keywords
 
 - Insight
-    - Like outline and popup menu, query-based approach allows language-agnostic implementation
+    - Query-based approach allows Lua code focus on "how" in language-agnostic way.
     - Plugin-specific query files is a good pattern to avoid conflicts among multiple plugins
 
 ---
@@ -463,9 +464,9 @@ Some of my favorites...
 
 ### Show context at the ends of functions, methods, statements, ...
 
-- Key concepts
-    - List node types to show context in Lua
-        - Some are common across parsers and allows partially language-agnostic implementation (e.g., function_definition)
+- Implementation pattern
+    - [Hard code node types](https://github.com/andersevenrud/nvim_context_vt/blob/fadbd9e57af72f6df3dd33df32ee733aa01cdbc0/lua/nvim_context_vt/config.lua#L18-L180) to show context in Lua
+        - Common node types allow partially language-agnostic implementation (e.g., function_definition)
         - The list can be modified by users
 
 ---
@@ -498,7 +499,7 @@ Some of my favorites...
 
 ### Sticky scroll
 
-- Key concepts
+- Implementation pattern
     - Use queries to capture context nodes (`@context`)
     - Show first line of `@context` capture as is
         - No need to know nest levels
@@ -530,7 +531,7 @@ Some of my favorites...
 
 ### Quickly select syntactic regions
 
-- Key concepts
+- Implementation pattern
     - Get node ranges of anscestor nodes by traversing syntax tree from the cursor position
     - Use two-step selection to avoid ambiguity of overlapping label hints
 
@@ -577,7 +578,7 @@ Some of my favorites...
 
 ### Extra highlight for special nodes
 
-- Key concepts
+- Implementation pattern
     - Find a node that satisfies one of
         - `@tsnodemarker` highlight capture
         -  User-defined callback functions
