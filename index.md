@@ -9,6 +9,15 @@ video,img {
   object-fit: contain;
   border: 1px solid #888;
 }
+a {
+  color: #5555AD;
+}
+small {
+  font-size: 0.8em;
+}
+strong {
+  color: #AD5555;
+}
 h1 {
   font-size: 1.3em;
 }
