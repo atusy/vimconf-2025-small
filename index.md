@@ -434,8 +434,6 @@ Some of my favorites...
 ) @scope.loop
 ```
 
-
-
 ---
 
 ### Navigate and highlight matching keywords
@@ -443,38 +441,6 @@ Some of my favorites...
 - Insight
     - **Query defines what** to match in language-specific way, and let **Lua code handle how** in language-agnostic way
     - **Plugin-specific query files** is a good pattern to avoid conflicts among multiple plugins
-
----
-
-### Show context at the ends of functions, methods, statements, ...
-
-[haringsrob/nvim_context_vt](https://github.com/haringsrob/nvim_context_vt)
-
-![](images/example-context-vt.png)
-
----
-
-### Show context at the ends of functions, methods, statements, ...
-
-
-- Usage
-    - Shows virtual text of the current context after functions, methods, statements, etc.
-
----
-
-### Show context at the ends of functions, methods, statements, ...
-
-- Implementation pattern
-    - [Hard code node types](https://github.com/andersevenrud/nvim_context_vt/blob/fadbd9e57af72f6df3dd33df32ee733aa01cdbc0/lua/nvim_context_vt/config.lua#L18-L180) in Lua, no queries
-        - Heavy dependence on parsers
-        - Common node types allow partially language-agnostic implementation (e.g., function_definition)
-
----
-
-### Show context at the ends of functions, methods, statements, ...
-
-- Insight
-    - Parser-based approach can be less language-specific because parsers tend to share common node types
 
 ---
 
@@ -509,6 +475,38 @@ Some of my favorites...
 
 - Insight
     - Yet another example of query-based approach
+
+---
+
+### Show context at the ends of functions, methods, statements, ...
+
+[haringsrob/nvim_context_vt](https://github.com/haringsrob/nvim_context_vt)
+
+![](images/example-context-vt.png)
+
+---
+
+### Show context at the ends of functions, methods, statements, ...
+
+
+- Usage
+    - Shows virtual text of the current context after functions, methods, statements, etc.
+
+---
+
+### Show context at the ends of functions, methods, statements, ...
+
+- Implementation pattern
+    - [Hard code node types](https://github.com/andersevenrud/nvim_context_vt/blob/fadbd9e57af72f6df3dd33df32ee733aa01cdbc0/lua/nvim_context_vt/config.lua#L18-L180) in Lua, no queries
+        - Heavy dependence on parsers
+        - Common node types allow partially language-agnostic implementation (e.g., function_definition)
+
+---
+
+### Show context at the ends of functions, methods, statements, ...
+
+- Insight
+    - Parser-based approach can be less language-specific because parsers tend to share common node types
 
 ---
 
