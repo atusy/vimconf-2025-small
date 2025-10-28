@@ -31,9 +31,12 @@ h1 {
 
 ## ![height:1em](images/headphone.jpg) atusy
 
-- <https://github.com/atusy>
-- <https://x.com/Atsushi776>
-- <https://blog.atusy.net>
+- Engineering Manager and Developer
+- Big fan of Neovim writing plugins and blogs
+- Follow me at
+    - <https://github.com/atusy>
+    - <https://x.com/Atsushi776>
+    - <https://blog.atusy.net>
 
 ---
 
