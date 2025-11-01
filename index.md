@@ -81,48 +81,7 @@ h1 {
 
 - No, tree-sitter is just a parsing library
 - Applicable to variety of syntax-aware features
-    - Highlighting
-    - Code folding
-    - Smart selection (e.g., function definition)
-    - Outline
-
----
-
-## What can be done by parsing?
-
-- Identify node type of a region
-    - function definition, string literal, assignment expression, ...
-- Identify hierarchical structure of nodes
-- Allow querying nodes by type and structure
-
----
-
-## Today's goal
-
-Be aware of tree-sitter as a tool to build your own workflow by
-
-- Exploring usecases beyond syntax highlighting
-- Showing insightful tree-sitter integration patterns
-- Developing treesitter-ls, a language server
-
----
-
-## What I don't cover today
-
-- Details of configurations and plugin development
-- Deep dive into tree-sitter internals
-
----
-
-## Usecases by Neovim-builtin features
-
-Let's learn
-
-- Usage
-- Implementation pattern
-- Insight
-
-from variety of features
+    - and Neovim has already integrated tree-sitter into many features
 
 ---
 
@@ -147,16 +106,45 @@ ol, p { font-size: 1.9rem }
 
 ### The answer is ... 7/10
 
-- There are more builtin features
+- There are more builtin- and plugin-features
 - The power of tree-sitter is already unlocked in Neovim!!
 - If you use Vim, sorry for inconvenience..., but I have a good news today
+
+---
+
+## Today's goal
+
+Be aware of tree-sitter as a tool to build your own workflow by
+
+1. Exploring usecases beyond syntax highlighting
+1. Showing insightful tree-sitter integration patterns
+1. Introducing treesitter-ls, a language server
+
+---
+
+## What I don't cover today
+
+- Details of configurations and plugin development
+- Deep dive into tree-sitter internals
+
+---
+
+## Usecases by Neovim-builtin features
+
+Let's learn
+
+- Usage
+- Implementation pattern
+- Insight
+
+from variety of features
 
 ---
 
 ### Syntax Highlighting
 
 - Usage
-    - `vim.treesitter.start()` to start syntax highlighting
+    - `vim.treesitter.start()` to start syntax highlighting given a parser
 
 ![](images/example-highlight.png)
 
@@ -167,10 +155,21 @@ ol, p { font-size: 1.9rem }
 - Implementation pattern
     - **Parser** determines code structure
         - e.g., `"foo"` is `string` node
-    - **Query** captures what to highlight
+    - **Query** searches for what to highlight
         - e.g., `(string) @string`
-    - **Captures** are equal to highlight groups
+    - **Captures** are regarded as highlight groups
         - e.g., `:hi @string guifg=Black`
+
+---
+
+
+### Definitions of terms
+
+- **Query**
+    - A language to search for code structures like `(string) @string`
+    - Stored in files per language and purpose like `~/.config/nvim/queries/python/highlights.scm`
+- **Capture** is a name of a matched node in a query
+    
 
 ---
 
@@ -246,7 +245,7 @@ Demo scenario
 ### Code folding with foldexpr
 
 - Implementation pattern
-    - Query determins what to fold
+    - Query searches for what to fold
         - e.g., `(function_definition) @fold`
     - Neovim determines how to fold
         - by calculating fold levels of the captures
@@ -343,7 +342,7 @@ Demo scenario
 ### Context-aware popup menu
 
 - Implementation pattern
-    - Query assigns `url` metadata to nodes
+    - Query sets `url` metadata to nodes
     - Lua code tests if the node has `url` metadata
 
 ```query
@@ -466,8 +465,6 @@ Some of my favorites...
 
 - Implementation pattern
     - Use queries to capture context nodes (`@context`)
-    - Show first line of `@context` capture as is
-        - No need to know nest levels
 
 ---
 
@@ -498,15 +495,15 @@ Some of my favorites...
 
 - Implementation pattern
     - [Hard code node types](https://github.com/andersevenrud/nvim_context_vt/blob/fadbd9e57af72f6df3dd33df32ee733aa01cdbc0/lua/nvim_context_vt/config.lua#L18-L180) in Lua, no queries
-        - Heavy dependence on parsers
-        - Common node types allow partially language-agnostic implementation (e.g., function_definition)
+        - Heavy dependency on parsers
+        - Common node types allow partially language-agnostic implementation (e.g., `function`)
 
 ---
 
 ### Show context at the ends of functions, methods, statements, ...
 
 - Insight
-    - Parser-based approach can be less language-specific because parsers tend to share common node types
+    - **Parser-based** approach can be more language-agnostic because parsers tend to share common node types
 
 ---
 
@@ -530,15 +527,16 @@ Some of my favorites...
 
 - Implementation pattern
     - Get node ranges of anscestor nodes by traversing syntax tree from the cursor position
-    - Use two-step selection to avoid ambiguity of overlapping label hints
+    - Use two-step selection to disambiguate overlapping label hints
 
 ---
 
 ### Quickly select syntactic regions
 
 - Insight
-    - The tree structure is only the interest
-        - No interests in node types or query-captured names
+    - **Tree-traversal-based** approach
+        - Not query-based nor parser-based approaches
+        - The tree structure is only the interest
         - Parser-agnostic and query-free
 
 ---
@@ -586,7 +584,7 @@ Some of my favorites...
 ### Extra highlight for special nodes
 
 - Insight
-    - Callback based approach allows flexible customization beyond query capabilities
+    - Callback-based approach allows flexible customization beyond query capabilities
 
 ---
 
@@ -616,8 +614,8 @@ Some of my favorites...
 - Tree-sitter integration has **diverse approaches**
     - query
     - parser
-    - callback
     - tree-traversal
+    - callback
 
 ---
 
@@ -634,11 +632,12 @@ Some of my favorites...
 
 ### Quick summary of approaches
 
-3. **Callback**-based
+3. **Tree-traversal**-based
+    - Applies iff only tree structure matters
+    - Parser-agnostic and query-free
+4. **Callback**-based
     - Requires user-defined Lua functions
     - Allows maximum flexibility
-4. **Tree-traversal**-based
-    - Applies iff only tree structure matters
 
 ---
 
@@ -687,7 +686,7 @@ such as ...
 
 Yes, for example:
 
-- Semantic Tokens (higihlighting)
+- Semantic Tokens (highlighting)
 - Go to Definition
 - Find References
 - Folding Range
@@ -738,9 +737,7 @@ To unlock various possibilities:
 ### Why treesitter-ls?
 
 4. Unlock **injected-language workflows**
-    - Use tree-sitter injections for code blocks, template strings, and DSLs
-    - By [treesitter-ls](https://github.com/atusy/treesitter-ls) itself being LSP-client
-        - Receive LSP-config from editor, and attach language servers for injected languages automatically
+    - Attach language-specific servers to code blocks or other injected contents by [treesitter-ls](https://github.com/atusy/treesitter-ls) itself being LSP-client
 
 ---
 
@@ -758,3 +755,15 @@ section {
 font-size: 3rem;
 }
 </style>
+
+---
+
+## How come tree-sitter allows variety of usecases?
+
+- Identifying node type of a region
+    - function definition, string literal, assignment expression, ...
+- Identifying hierarchical structure of nodes
+- Allowing query nodes by type and structure
+
+---
+
