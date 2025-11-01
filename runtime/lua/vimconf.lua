@@ -13,6 +13,7 @@ vim.o.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 vim.o.foldtext = ""
 vim.o.foldlevel = 99
 vim.o.number = true
+vim.o.laststatus = 3
 
 local enable_tsnode_marker = true
 
